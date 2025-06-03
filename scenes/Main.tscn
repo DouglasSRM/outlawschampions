@@ -14,8 +14,6 @@ size = Vector3(8.15, 0.5, 4.65)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_c01mt")
-action_deck_count = 100
-support_deck_count = 100
 
 [node name="Game" type="Node3D" parent="."]
 
