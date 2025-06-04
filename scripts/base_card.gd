@@ -25,10 +25,18 @@ var entered = false
 var hand_pos = Vector3(0,0,0)
 var hover_pos = Vector3(0,0,0)
 
+@onready var state_machine: CardStateMachine = $StateMachine
+@onready var deck: CardState = $StateMachine/Deck
+
 
 func _ready() -> void:
 	pass
 
+func get_deck_count() -> int:
+	return 0
+	
+func set_deck_position(pos: int) -> void:
+	self.deck_position = pos
 
 func table_click():
 	parent.manage_table_click(self)
@@ -36,16 +44,20 @@ func table_click():
 func hand_click():
 	parent.manage_hand_click(self)
 
+
+func update():
+	state_machine.update()
+
+
+func click():
+	state_machine.process_click()
+
+
 func deck_click():
-	parent.manage_deck_click(self)
-
-func set_texture(texture: Texture2D) -> bool:
-	$Sprite.texture = texture
-	$Sprite.update_sprite_scale()
-	return true
-
-func set_deck_position(pos: int) -> bool:
-	return true
+	var card: BaseCard = parent.manage_deck_click(self)
+	if card:
+		parent.update_hand_count(1)
+		card.click()
 
 
 func discard(pos: int):
@@ -58,6 +70,10 @@ func discard(pos: int):
 func play() -> bool:
 	await get_tree().create_timer(0.7).timeout
 	return true
+
+
+func get_hand_count() -> int:
+	return parent.hand_count;
 
 
 func update_table_position(pos: int, total: int) -> bool:	
@@ -77,6 +93,7 @@ func update_table_position(pos: int, total: int) -> bool:
 	var table_pos = Vector3(x, 0, z)
 	move_state(table_pos, IN_TABLE)
 	return true
+
 
 func update_hand_position(pos: int, total: int) -> bool:	
 	deck_position = 0
@@ -145,6 +162,7 @@ func on_mouse_exited() -> void:
 	if (state == IN_HAND or state == SELECT) and entered == true:
 		entered = false
 		move_to_position(Vector3(hand_pos), 0.2)
+
 
 func move_to_position(target_position: Vector3, duration: float):
 	var tween = create_tween()

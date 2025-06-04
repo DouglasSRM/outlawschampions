@@ -1,9 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://drop5ptepg5rb"]
+[gd_scene load_steps=10 format=3 uid="uid://drop5ptepg5rb"]
 
 [ext_resource type="Script" uid="uid://c50h160mqhm2b" path="res://scripts/base_card.gd" id="1_unfoy"]
 [ext_resource type="Texture2D" uid="uid://qgys0ouhv1vs" path="res://images/cover.png" id="2_ewi80"]
 [ext_resource type="Script" uid="uid://c47b3bfjpsxs0" path="res://scripts/card_sprite.gd" id="3_wivmf"]
 [ext_resource type="Script" uid="uid://dl6jem0us7ohm" path="res://scripts/card_body.gd" id="4_ya72j"]
+[ext_resource type="Script" uid="uid://dg4x70sn75w1l" path="res://scripts/state_machine.gd" id="5_ewi80"]
+[ext_resource type="Script" uid="uid://bn8ys5x8ytrlv" path="res://scripts/deck.gd" id="6_wivmf"]
+[ext_resource type="Script" uid="uid://bjstqwa2le8rn" path="res://scripts/states/hand.gd" id="7_ya72j"]
+[ext_resource type="Script" uid="uid://bv4td46aac5kj" path="res://scripts/states/table.gd" id="8_k2mc5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s4mse"]
 margin = 0.0
@@ -28,6 +32,18 @@ shape = SubResource("BoxShape3D_s4mse")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.001)
 pixel_size = 0.0006
 texture = ExtResource("2_ewi80")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("5_ewi80")
+
+[node name="Deck" type="Node" parent="StateMachine"]
+script = ExtResource("6_wivmf")
+
+[node name="Hand" type="Node" parent="StateMachine"]
+script = ExtResource("7_ya72j")
+
+[node name="Table" type="Node" parent="StateMachine"]
+script = ExtResource("8_k2mc5")
 
 [connection signal="input_event" from="Sprite/Body" to="Sprite/Body" method="_on_input_event"]
 [connection signal="mouse_entered" from="Sprite/Body" to="Sprite/Body" method="_on_mouse_entered"]
