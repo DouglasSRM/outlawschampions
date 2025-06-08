@@ -5,7 +5,7 @@ const LADINO = "res://images/ladino.png"
 const MAGO = "res://images/mago.png"
 const PALADINO = "res://images/paladino.png"
 
-const base_card_scene = preload("res://base_card.tscn")
+const base_card_scene = preload("res://scenes/base_card.tscn")
 
 var hand_count = 0
 
