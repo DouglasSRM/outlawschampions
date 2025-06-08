@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://8yke3hj82k58"]
+
+[ext_resource type="Script" uid="uid://cl8126njaxgsh" path="res://scenes/main.gd" id="1_c01mt"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qnwvq"]
+size = Vector3(20, 0.5, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_elqb8"]
+vertex_color_is_srgb = true
+albedo_color = Color(1.8049e-08, 0.29379, 0.0511968, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rvslj"]
+size = Vector3(20, 0.5, 20)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_c01mt")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.256931, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_qnwvq")
+surface_material_override/0 = SubResource("StandardMaterial3D_elqb8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_rvslj")
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, -0.998356, 0.0573203, 0, -0.0573203, -0.998356, 0, 3.30823, -16.4713)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 6.18172e-08, -6.18172e-08, 0, 0.707107, 0.707107, 8.74228e-08, 0.707107, -0.707107, 0, 2.6, -7.8)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.0619718, 0.998078, 0, -0.998078, 0.0619718, 0, 14.9821, 0)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999741, 0.0227745, 0, -0.0227745, 0.999741, 0, 3.88287, 0)
