@@ -10,5 +10,8 @@ func _process(delta: float) -> void:
 	pass
 
 func on_click():
-	if get_parent().state == BaseCard.IN_DECK:
-		get_parent().deck_click()
+	match get_parent().state:
+		BaseCard.IN_DECK:
+			get_parent().deck_click()
+		BaseCard.IN_HAND:
+			get_parent().hand_click()
