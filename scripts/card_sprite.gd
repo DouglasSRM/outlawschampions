@@ -10,7 +10,10 @@ func _process(delta: float) -> void:
 	pass
 
 func on_click():
+	print('a')
 	match get_parent().state:
+		BaseCard.CHAMPION:
+			get_parent().decrease_health(1)
 		BaseCard.IN_DECK:
 			get_parent().deck_click()
 		BaseCard.IN_HAND:

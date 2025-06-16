@@ -3,14 +3,19 @@ extends Node3D
 
 enum {
 	NONE,
+	CHAMPION,
 	IN_DECK,
 	IN_HAND,
 	IN_TABLE
 }
 
+@onready
+var parent = get_parent().get_parent()
+ 
 var state = NONE
 var hand_position = 0
 var table_position = 0
+var deck_position = 0
 
 var entered = false
 var hand_pos = Vector3(0,0,0)
@@ -22,16 +27,17 @@ func _ready() -> void:
 	#update_hand_position(0,1)
 
 func hand_click():
-	get_parent().manage_hand_click(self)
+	parent.manage_hand_click(self)
 
 func deck_click():
-	get_parent().manage_deck_click(self)
+	parent.manage_deck_click()
 
 func set_texture(texture: Texture2D) -> bool:
 	$Sprite.texture = texture
 	return true
 
 func set_deck_position(pos: int) -> bool:
+	deck_position = pos
 	var y = pos * 0.01
 	position = Vector3(-0.5, y, 0.9)
 	rotation = Vector3(deg_to_rad(-90), deg_to_rad(-90), 0.0)
@@ -57,6 +63,8 @@ func update_table_position(pos: int, total: int) -> bool:
 	return true
 
 func update_hand_position(pos: int, total: int) -> bool:	
+	deck_position = 0
+	
 	if pos != 0: # 0 mantem a posição atual
 		hand_position = pos
 	
@@ -89,7 +97,7 @@ func _process(delta: float) -> void:
 
 
 func move_state(target_position: Vector3, new_state):
-	get_parent().lock()
+	parent.lock()
 	
 	var duration = 0.5
 	var tween = create_tween()
@@ -97,18 +105,18 @@ func move_state(target_position: Vector3, new_state):
 	await tween.finished
 	state = new_state
 	
-	get_parent().unlock()
+	parent.unlock()
 
 func _on_body_mouse_entered() -> void:
-	if get_parent().move_locked:
+	if parent.move_locked:
 		return
 		
-	if state == BaseCard.IN_HAND:
+	if state == IN_HAND:
 		entered = true		
 		move_to_position(hover_pos, 0.2)
 
 func _on_body_mouse_exited() -> void:
-	if get_parent().move_locked:
+	if parent.move_locked:
 		return
 	
 	if state == BaseCard.IN_HAND and entered == true:
