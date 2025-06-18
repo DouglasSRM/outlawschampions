@@ -3,6 +3,7 @@ extends Node3D
 
 enum {
 	NONE,
+	SELECT,
 	CHAMPION,
 	IN_DECK,
 	IN_HAND,
@@ -34,6 +35,7 @@ func deck_click():
 
 func set_texture(texture: Texture2D) -> bool:
 	$Sprite.texture = texture
+	$Sprite.update_sprite_scale()
 	return true
 
 func set_deck_position(pos: int) -> bool:
@@ -85,7 +87,7 @@ func update_hand_position(pos: int, total: int) -> bool:
 	
 	return true
 
-func update_hover_pos(pos: Vector3):
+func update_hover_pos(pos: Vector3 = position):
 	var pos_x = (pos[0] / 4) * 3.07
 	var pos_y = 0.7  
 	var pos_z = pos[2] - (pos[2] / 4.23)
@@ -108,18 +110,24 @@ func move_state(target_position: Vector3, new_state):
 	parent.unlock()
 
 func _on_body_mouse_entered() -> void:
+	if !parent:
+		return
+	
 	if parent.move_locked:
 		return
 		
-	if state == IN_HAND:
+	if state == IN_HAND or state == SELECT:
 		entered = true		
 		move_to_position(hover_pos, 0.2)
 
 func _on_body_mouse_exited() -> void:
+	if !parent:
+		return
+	
 	if parent.move_locked:
 		return
 	
-	if state == BaseCard.IN_HAND and entered == true:
+	if (state == IN_HAND or state == SELECT) and entered == true:
 		entered = false
 		move_to_position(Vector3(hand_pos), 0.2)
 

@@ -1,33 +1,38 @@
 class_name ChampionCard
 extends BaseCard
 
-enum eStatus {
+enum hStatus {
 	FULL,
 	HALF,
 	DYING
 }
 
-var health_status = eStatus.FULL
-var max_health = 50
-var health = 50
-var power = 0
+var health_status = hStatus.FULL
+var max_health: int
+var health: int
+var power: int
+var max_mana: int
+var mana: int
 
 func decrease_health(value):
 	health = max(0, health - value)
 	
 	update_status()
 
+func attack(champion: ChampionCard, damage := power):
+	champion.decrease_health(damage)
+
 func update_status():
 	match health:
-		0: health_status = eStatus.DYING
+		0: health_status = hStatus.DYING
 
+func select():
+	Global.sender = self
+	get_parent().get_parent().change_scene()
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	state = CHAMPION
-	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass

@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cc4u01c30ok5y"]
+
+[ext_resource type="PackedScene" uid="uid://pxwdlllhrxt5" path="res://scenes/champion_card.tscn" id="1_q4ql4"]
+[ext_resource type="Script" uid="uid://c7gs6wp23q5ak" path="res://scripts/paladin.gd" id="2_vyakj"]
+[ext_resource type="Texture2D" uid="uid://dgab42utfx5vo" path="res://images/paladin.png" id="3_k23vw"]
+
+[node name="Paladin" instance=ExtResource("1_q4ql4")]
+script = ExtResource("2_vyakj")
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource("3_k23vw")

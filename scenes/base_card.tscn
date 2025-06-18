@@ -6,13 +6,15 @@
 [ext_resource type="Script" uid="uid://dl6jem0us7ohm" path="res://scripts/card_body.gd" id="4_ya72j"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s4mse"]
-size = Vector3(5.3, 7.5, 0.2)
+margin = 0.0
+size = Vector3(0.54, 0.81, 0.01)
 
 [node name="BaseCard" type="Node3D"]
 script = ExtResource("1_unfoy")
 
 [node name="Sprite" type="Sprite3D" parent="."]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+pixel_size = 0.0006
 texture = ExtResource("2_ewi80")
 script = ExtResource("3_wivmf")
 
@@ -21,6 +23,11 @@ script = ExtResource("4_ya72j")
 
 [node name="Collision" type="CollisionShape3D" parent="Sprite/Body"]
 shape = SubResource("BoxShape3D_s4mse")
+
+[node name="CoverSprite" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.001)
+pixel_size = 0.0006
+texture = ExtResource("2_ewi80")
 
 [connection signal="input_event" from="Sprite/Body" to="Sprite/Body" method="_on_input_event"]
 [connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]

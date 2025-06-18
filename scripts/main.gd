@@ -7,14 +7,12 @@ enum camera_pos {
 }
 
 @onready
-var health = $GUI/Control/Health
-@onready
-var champion = $Game/Champion
+var health: Label = $GUI/Control/Health
 
-const DRUIDA = "res://images/druida.png"
-const LADINO = "res://images/ladino.png"
-const MAGO = "res://images/mago.png"
-const PALADINO = "res://images/paladino.png"
+@onready
+var champion: ChampionCard = null
+
+const ATAQUE_PADRAO = "res://images/ataque_padrao.png"
 
 const base_card_scene = preload("res://scenes/base_card.tscn")
 
@@ -26,12 +24,23 @@ var move_locked = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	champion.set_texture(load(MAGO))
-	set_camera_position(camera_pos.START)
-	create_cards(15)
-	$Game/BaseCard5.set_texture(load(LADINO))
-	$Game/BaseCard7.set_texture(load(DRUIDA))
-	$Game/BaseCard8.set_texture(load(PALADINO))
+	if Global.sender is ChampionCard:
+		var move_duration = 0.7 # seconds
+		
+		champion = Global.sender 
+		$Game.add_child(champion)
+		champion.move_to_position(Vector3(0,0,0.1), move_duration)
+		
+		$Game.add_child(Global.champion2)
+		$Game.add_child(Global.champion3)
+		$Game.add_child(Global.champion4)
+		
+		Global.champion2.move_to_position(Vector3(1.8,0,0.9) , move_duration)
+		Global.champion3.move_to_position(Vector3(0,0,1.7)   , move_duration)
+		Global.champion4.move_to_position(Vector3(-1.8,0,0.9), move_duration)
+		
+		set_camera_position(camera_pos.START)
+		create_cards(15)
 
 func manage_hand_click(card: BaseCard):
 	if move_locked:
@@ -51,17 +60,13 @@ func manage_deck_click():
 	card.update_hand_position(hand_count,hand_count)
 	card.set_texture(load(get_random_card()))
 
-func get_random_card() -> String: 
-	match randi_range(1,4):
-		1: return DRUIDA
-		2: return LADINO
-		3: return MAGO
-		_: return PALADINO
+func get_random_card() -> String:
+	#match randi_range(1,1):
+	return ATAQUE_PADRAO
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
-	health.text = str(champion.health)+"/"+str(champion.max_health)
+	if champion:
+		health.text = str(champion.health)+"/"+str(champion.max_health)
 
 func get_card_from_deck() -> BaseCard:
 	for card in $Game.get_children():
@@ -112,7 +117,7 @@ func unlock():
 	move_locked = false
 
 func set_camera_position(pos):
-	match pos: 
+	match pos:
 		camera_pos.START:
 			$Game/Camera.position = Vector3(0, 3, 0)
 			$Game/Camera.rotation = Vector3(deg_to_rad(-90), deg_to_rad(-180), 0.0)

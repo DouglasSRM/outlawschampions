@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://8yke3hj82k58"]
+[gd_scene load_steps=7 format=3 uid="uid://8yke3hj82k58"]
 
 [ext_resource type="Script" uid="uid://cl8126njaxgsh" path="res://scripts/main.gd" id="1_c01mt"]
 [ext_resource type="PackedScene" uid="uid://drop5ptepg5rb" path="res://scenes/base_card.tscn" id="2_rvslj"]
+[ext_resource type="PackedScene" uid="uid://pxwdlllhrxt5" path="res://scenes/champion_card.tscn" id="3_0bbpv"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qnwvq"]
 size = Vector3(8.25, 0.5, 4.65)
@@ -41,8 +42,20 @@ transform = Transform3D(1, 0, 0, 0, -0.975596, 0.219574, 0, -0.219574, -0.975596
 [node name="BaseCard2" parent="Game" instance=ExtResource("2_rvslj")]
 transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, -0.5, 0, 0.9)
 
+[node name="BaseCard5" parent="Game" instance=ExtResource("2_rvslj")]
+transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 0, 0, 1.7)
+
 [node name="BaseCard6" parent="Game" instance=ExtResource("2_rvslj")]
 transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0.5, 0, 0.9)
+
+[node name="BaseCard7" parent="Game" instance=ExtResource("2_rvslj")]
+transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, -1.8, 0, 0.9)
+
+[node name="BaseCard8" parent="Game" instance=ExtResource("2_rvslj")]
+transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 0, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 1.8, 0, 0.9)
+
+[node name="Champion" parent="Game" instance=ExtResource("3_0bbpv")]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, 0.1)
 
 [node name="BaseCard3" parent="Game" instance=ExtResource("2_rvslj")]
 transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 2.88757, 0, -0.880713)
