@@ -38,12 +38,6 @@ transform = Transform3D(1, 0, 0, 0, 0.0339576, 0.999423, 0, -0.999423, 0.0339576
 [node name="Light3" type="DirectionalLight3D" parent="Game"]
 transform = Transform3D(1, 0, 0, 0, -0.975596, 0.219574, 0, -0.219574, -0.975596, 0, 3.79288, -16.4713)
 
-[node name="BaseCard2" parent="Game" instance=ExtResource("2_rvslj")]
-transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, -0.5, 0, 0.9)
-
-[node name="BaseCard6" parent="Game" instance=ExtResource("2_rvslj")]
-transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0.5, 0, 0.9)
-
 [node name="BaseCard3" parent="Game" instance=ExtResource("2_rvslj")]
 transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 2.88757, 0, -0.880713)
 
@@ -55,6 +49,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -62,12 +58,51 @@ mouse_filter = 2
 [node name="Health" type="Label" parent="GUI/Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.87
-anchor_top = 0.886
-anchor_right = 0.971
-anchor_bottom = 0.957
-offset_left = -0.240051
-offset_top = -0.128052
-offset_right = -7.59204
-offset_bottom = 3.86401
-theme_override_font_sizes/font_size = 27
+anchor_left = 0.545
+anchor_top = 0.465
+anchor_right = 0.602
+anchor_bottom = 0.508
+offset_left = 0.159973
+offset_top = -0.320007
+offset_right = 0.495911
+offset_bottom = -0.184021
+theme_override_font_sizes/font_size = 20
+
+[node name="HealthL" type="Label" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.321
+anchor_top = 0.282
+anchor_right = 0.374
+anchor_bottom = 0.326
+offset_left = 0.207977
+offset_top = 0.263992
+offset_right = 0.151978
+offset_bottom = -0.248001
+theme_override_font_sizes/font_size = 20
+
+[node name="HealthU" type="Label" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.545
+anchor_top = 0.108
+anchor_right = 0.602
+anchor_bottom = 0.151
+offset_left = 0.159973
+offset_top = 0.0159988
+offset_right = 0.495911
+offset_bottom = 0.151993
+theme_override_font_sizes/font_size = 20
+
+[node name="HealthR" type="Label" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.76
+anchor_top = 0.282
+anchor_right = 0.812
+anchor_bottom = 0.326
+offset_left = -0.520081
+offset_top = 0.263992
+offset_right = 0.575928
+offset_bottom = -0.248001
+theme_override_font_sizes/font_size = 20

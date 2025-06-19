@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://cw6oemu3emw7q"]
+
+[ext_resource type="PackedScene" uid="uid://dw80bpuaqwbb" path="res://scenes/action_card.tscn" id="1_ug8ir"]
+[ext_resource type="Script" uid="uid://b7njrl17fs1ud" path="res://scripts/basic_attack.gd" id="2_1ty0s"]
+[ext_resource type="Texture2D" uid="uid://d3kxoquwiycmq" path="res://images/basic_attack.png" id="3_5khvm"]
+
+[node name="BasicAttack" instance=ExtResource("1_ug8ir")]
+script = ExtResource("2_1ty0s")
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource("3_5khvm")
+
+[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]

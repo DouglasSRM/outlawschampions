@@ -30,5 +30,5 @@ pixel_size = 0.0006
 texture = ExtResource("2_ewi80")
 
 [connection signal="input_event" from="Sprite/Body" to="Sprite/Body" method="_on_input_event"]
-[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
-[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]
+[connection signal="mouse_entered" from="Sprite/Body" to="Sprite/Body" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite/Body" to="Sprite/Body" method="_on_mouse_exited"]

@@ -8,17 +8,31 @@ enum camera_pos {
 
 @onready
 var health: Label = $GUI/Control/Health
+@onready
+var healthL: Label = $GUI/Control/HealthL
+@onready
+var healthU: Label = $GUI/Control/HealthU
+@onready
+var healthR: Label = $GUI/Control/HealthR
 
 @onready
 var champion: ChampionCard = null
+@onready
+var opponentL: ChampionCard = null
+@onready
+var opponentU: ChampionCard = null
+@onready
+var opponentR: ChampionCard = null
 
-const ATAQUE_PADRAO = "res://images/ataque_padrao.png"
-
-const base_card_scene = preload("res://scenes/base_card.tscn")
+const champion_position = Vector3(0,0,0.1)
+const opponentL_position = Vector3(1.8,0,0.9)
+const opponentU_position = Vector3(0,0,1.7)
+const opponentR_position = Vector3(-1.8,0,0.9)
 
 var hand_count = 0
 var table_count = 0
-var deck_count = 0
+var action_deck_count = 0
+var support_deck_count = 0
 
 var move_locked = false
 
@@ -29,18 +43,25 @@ func _ready() -> void:
 		
 		champion = Global.sender 
 		$Game.add_child(champion)
-		champion.move_to_position(Vector3(0,0,0.1), move_duration)
+		champion.set_default_position(champion_position, move_duration)
 		
-		$Game.add_child(Global.champion2)
-		$Game.add_child(Global.champion3)
-		$Game.add_child(Global.champion4)
+		opponentL = Global.champion2
+		opponentU = Global.champion3
+		opponentR = Global.champion4
 		
-		Global.champion2.move_to_position(Vector3(1.8,0,0.9) , move_duration)
-		Global.champion3.move_to_position(Vector3(0,0,1.7)   , move_duration)
-		Global.champion4.move_to_position(Vector3(-1.8,0,0.9), move_duration)
+		$Game.add_child(opponentL)
+		$Game.add_child(opponentU)
+		$Game.add_child(opponentR)
+		
+		opponentL.set_default_position(opponentL_position, move_duration)
+		opponentU.set_default_position(opponentU_position, move_duration)
+		opponentR.set_default_position(opponentR_position, move_duration)
 		
 		set_camera_position(camera_pos.START)
-		create_cards(15)
+		create_action_cards(25)
+		create_support_cards(25)
+		
+		set_starter_hand()
 
 func manage_hand_click(card: BaseCard):
 	if move_locked:
@@ -50,39 +71,92 @@ func manage_hand_click(card: BaseCard):
 	update_hand_count(-1,card)
 	card.update_table_position(table_count,table_count)
 
-func manage_deck_click():
-	if move_locked:
+func set_starter_hand():
+	var i = 1
+	hand_count = 6
+	while i <= 3:
+		var card = get_card_from_action_deck()
+		action_deck_count = action_deck_count-1
+		card.update_hand_position(i,hand_count)
+		i = i+1
+	
+	while i <= 6:
+		var card = get_card_from_support_deck()
+		support_deck_count = support_deck_count-1
+		card.update_hand_position(i,hand_count)
+		i = i+1
+
+func manage_deck_click(sender: BaseCard, lock = true):
+	if lock and move_locked:
 		return
-		
-	var card = get_card_from_deck()
-	deck_count = deck_count-1
+	
+	var card
+	if sender is ActionCard:
+		card = get_card_from_action_deck()
+		action_deck_count = action_deck_count-1
+	else:
+		card = get_card_from_support_deck()
+		support_deck_count = support_deck_count-1
+	
 	update_hand_count(1)
 	card.update_hand_position(hand_count,hand_count)
-	card.set_texture(load(get_random_card()))
 
-func get_random_card() -> String:
-	#match randi_range(1,1):
-	return ATAQUE_PADRAO
+
+func get_action_card() -> ActionCard:
+	match randi_range(1,2):
+		1:	return Global.basic_attack_scene.instantiate()
+		_:	return Global.opportunity_attack_scene.instantiate()
+
+
+func get_support_card() -> SupportCard:
+	match randi_range(1,2):
+		1:	return Global.parry_scene.instantiate()
+		_:	return Global.protector_shield_scene.instantiate()
+
 
 func _process(delta: float) -> void:
 	if champion:
-		health.text = str(champion.health)+"/"+str(champion.max_health)
+		health.text = str(champion.health)+"/"+str(champion.max_health) + "\n" + str(champion.mana)+"/"+str(champion.max_mana)
+	if opponentL:
+		healthL.text = str(opponentL.health)+"/"+str(opponentL.max_health) + "\n" + str(opponentL.mana)+"/"+str(opponentL.max_mana)
+	if opponentU:
+		healthU.text = str(opponentU.health)+"/"+str(opponentU.max_health) + "\n" + str(opponentU.mana)+"/"+str(opponentU.max_mana)
+	if opponentR:
+		healthR.text = str(opponentR.health)+"/"+str(opponentR.max_health) + "\n" + str(opponentR.mana)+"/"+str(opponentR.max_mana)
 
-func get_card_from_deck() -> BaseCard:
+func get_card_from_action_deck() -> BaseCard:
 	for card in $Game.get_children():
-		if card is BaseCard and card.state == BaseCard.IN_DECK:
-			if card.deck_position == deck_count-1:
+		if card is ActionCard and card.state == BaseCard.IN_DECK:
+			if card.deck_position == action_deck_count-1:
 				return card
 	return null
 
-func create_cards(ammount: int):
-	print('creating')
-	deck_count = ammount
+
+func get_card_from_support_deck() -> BaseCard:
+	for card in $Game.get_children():
+		if card is SupportCard and card.state == BaseCard.IN_DECK:
+			if card.deck_position == support_deck_count-1:
+				return card
+	return null
+
+
+func create_action_cards(ammount: int):
+	action_deck_count = ammount
 	for i in range(ammount):
-		var card = base_card_scene.instantiate()
+		var card = get_action_card()
 		card.state = BaseCard.IN_DECK
 		card.set_deck_position(i)
 		$Game.add_child(card)
+
+
+func create_support_cards(ammount: int):
+	support_deck_count = ammount
+	for i in range(ammount):
+		var card = get_support_card()
+		card.state = BaseCard.IN_DECK
+		card.set_deck_position(i)
+		$Game.add_child(card)
+
 
 func update_table_count(count: int) -> bool:
 	table_count = table_count + count
@@ -105,11 +179,7 @@ func update_hand_count(count: int, removed_card: BaseCard = null) -> bool:
 				card.update_hand_position(card.hand_position-1, hand_count)
 	return true
 
-func set_card_states(state: int) -> void:
-	for card in $Game.get_children():
-		if card is BaseCard:
-			card.state = state
-	
+
 func lock():
 	move_locked = true
 	

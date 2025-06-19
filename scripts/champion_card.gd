@@ -7,6 +7,7 @@ enum hStatus {
 	DYING
 }
 
+var default_position = Vector3(0,0,0)
 var health_status = hStatus.FULL
 var max_health: int
 var health: int
@@ -26,9 +27,44 @@ func update_status():
 	match health:
 		0: health_status = hStatus.DYING
 
+func set_default_position(pos: Vector3, dur):
+	parent = get_parent().get_parent()
+	
+	default_position = pos
+	update_hover_pos(default_position)
+	move_to_position(default_position, dur)
+
 func select():
 	Global.sender = self
 	get_parent().get_parent().change_scene()
+
+
+func on_mouse_entered() -> void:
+	super()
+	
+	if !parent:
+		return
+		
+		
+	if parent.move_locked:
+		return
+		
+	if state == CHAMPION:
+		entered = true		
+		move_to_position(hover_pos, 0.2)
+
+func on_mouse_exited() -> void:
+	super()
+	
+	if !parent:
+		return
+		
+	if parent.move_locked:
+		return
+	
+	if state == CHAMPION and entered == true:
+		entered = false
+		move_to_position(Vector3(default_position), 0.2)
 
 func _ready() -> void:
 	state = CHAMPION

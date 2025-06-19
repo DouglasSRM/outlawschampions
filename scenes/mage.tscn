@@ -10,3 +10,6 @@ script = ExtResource("2_t2cfv")
 [node name="Sprite" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 texture = ExtResource("2_y6d06")
+
+[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]

@@ -31,7 +31,7 @@ func hand_click():
 	parent.manage_hand_click(self)
 
 func deck_click():
-	parent.manage_deck_click()
+	parent.manage_deck_click(self)
 
 func set_texture(texture: Texture2D) -> bool:
 	$Sprite.texture = texture
@@ -39,11 +39,6 @@ func set_texture(texture: Texture2D) -> bool:
 	return true
 
 func set_deck_position(pos: int) -> bool:
-	deck_position = pos
-	var y = pos * 0.01
-	position = Vector3(-0.5, y, 0.9)
-	rotation = Vector3(deg_to_rad(-90), deg_to_rad(-90), 0.0)
-	
 	return true
 
 func update_table_position(pos: int, total: int) -> bool:	
@@ -109,7 +104,7 @@ func move_state(target_position: Vector3, new_state):
 	
 	parent.unlock()
 
-func _on_body_mouse_entered() -> void:
+func on_mouse_entered() -> void:
 	if !parent:
 		return
 	
@@ -120,7 +115,8 @@ func _on_body_mouse_entered() -> void:
 		entered = true		
 		move_to_position(hover_pos, 0.2)
 
-func _on_body_mouse_exited() -> void:
+
+func on_mouse_exited() -> void:
 	if !parent:
 		return
 	

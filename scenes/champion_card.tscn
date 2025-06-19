@@ -3,5 +3,5 @@
 [ext_resource type="PackedScene" uid="uid://drop5ptepg5rb" path="res://scenes/base_card.tscn" id="1_dk3qq"]
 [ext_resource type="Script" uid="uid://cfviftf160frr" path="res://scripts/champion_card.gd" id="2_wnws5"]
 
-[node name="BaseCard" instance=ExtResource("1_dk3qq")]
+[node name="ChampionCard" instance=ExtResource("1_dk3qq")]
 script = ExtResource("2_wnws5")

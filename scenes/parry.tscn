@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccmsjwiqbvg2e"]
+
+[ext_resource type="PackedScene" uid="uid://d0o7tewql6o8i" path="res://scenes/support_card.tscn" id="1_h4n1m"]
+[ext_resource type="Script" uid="uid://dho5sd0ut2h6r" path="res://scripts/parry.gd" id="2_1h148"]
+[ext_resource type="Texture2D" uid="uid://c5xhgsmlqlvjx" path="res://images/parry.png" id="3_lpk23"]
+
+[node name="Parry" instance=ExtResource("1_h4n1m")]
+script = ExtResource("2_1h148")
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource("3_lpk23")
+
+[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]

@@ -11,11 +11,11 @@ func _process(delta: float) -> void:
 
 
 func _on_mouse_entered() -> void:
-	get_parent().on_mouse_entered()
+	get_parent().get_parent().on_mouse_entered()
 
 
 func _on_mouse_exited() -> void:
-	get_parent().on_mouse_exited()
+	get_parent().get_parent().on_mouse_exited()
 	
 	
 func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:

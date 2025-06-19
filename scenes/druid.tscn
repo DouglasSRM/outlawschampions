@@ -9,3 +9,6 @@ script = ExtResource("2_o3vap")
 
 [node name="Sprite" parent="." index="0"]
 texture = ExtResource("3_gabhy")
+
+[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]
