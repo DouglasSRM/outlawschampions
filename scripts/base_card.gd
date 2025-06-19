@@ -7,16 +7,20 @@ enum {
 	CHAMPION,
 	IN_DECK,
 	IN_HAND,
-	IN_TABLE
+	IN_TABLE,
+	IN_DISCARD
 }
 
 @onready
 var parent = get_parent().get_parent()
  
+var description = ''
+
 var state = NONE
 var hand_position = 0
 var table_position = 0
 var deck_position = 0
+var discard_position = 0
 
 var entered = false
 var hand_pos = Vector3(0,0,0)
@@ -26,6 +30,9 @@ var hover_pos = Vector3(0,0,0)
 func _ready() -> void:
 	pass
 	#update_hand_position(0,1)
+
+func table_click():
+	parent.manage_table_click(self)
 
 func hand_click():
 	parent.manage_hand_click(self)
@@ -40,6 +47,19 @@ func set_texture(texture: Texture2D) -> bool:
 
 func set_deck_position(pos: int) -> bool:
 	return true
+
+
+func discard(pos: int):
+	discard_position = pos
+	var y = pos * 0.005
+	rotation = Vector3(deg_to_rad(90), deg_to_rad(-90), 0.0)
+	move_state(Vector3(3, y, -0.9), IN_DISCARD)
+
+
+func play() -> bool:
+	await get_tree().create_timer(0.7).timeout
+	return true
+
 
 func update_table_position(pos: int, total: int) -> bool:	
 	hand_position = 0

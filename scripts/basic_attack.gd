@@ -1,12 +1,25 @@
 class_name BasicAttack
 extends ActionCard
 
+@onready
+var damage = Global.sender.power
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	description = ''
+	description = 'Deals the base damage of your champion ('+str(damage)+') to a random enemy'
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func play() -> bool:
+	var enemy: ChampionCard
+	match randi_range(1,3):
+		1: enemy = Global.champion2
+		2: enemy = Global.champion3
+		_: enemy = Global.champion4
+	
+	enemy.decrease_health(damage)
+	parent.show_enemy(enemy)
+	
+	return await super()
+
+
 func _process(delta: float) -> void:
 	pass

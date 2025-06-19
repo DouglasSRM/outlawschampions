@@ -30,3 +30,5 @@ func on_click():
 			get_parent().deck_click()
 		BaseCard.IN_HAND:
 			get_parent().hand_click()
+		BaseCard.IN_TABLE:
+			get_parent().table_click()

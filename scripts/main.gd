@@ -7,6 +7,8 @@ enum camera_pos {
 }
 
 @onready
+var card_description: Label = $GUI/Control/LblDescription
+@onready
 var health: Label = $GUI/Control/Health
 @onready
 var healthL: Label = $GUI/Control/HealthL
@@ -14,6 +16,9 @@ var healthL: Label = $GUI/Control/HealthL
 var healthU: Label = $GUI/Control/HealthU
 @onready
 var healthR: Label = $GUI/Control/HealthR
+
+@onready
+var btn_play_card: Button = $GUI/Control/BtnPlayCard
 
 @onready
 var champion: ChampionCard = null
@@ -33,10 +38,13 @@ var hand_count = 0
 var table_count = 0
 var action_deck_count = 0
 var support_deck_count = 0
+var discard_count = 0
+
+var selected_card: BaseCard
 
 var move_locked = false
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	if Global.sender is ChampionCard:
 		var move_duration = 0.7 # seconds
@@ -62,14 +70,59 @@ func _ready() -> void:
 		create_support_cards(25)
 		
 		set_starter_hand()
+		btn_play_card.visible = false
 
 func manage_hand_click(card: BaseCard):
 	if move_locked:
 		return
 	
+	if table_count >= 1:
+		return
+	
+	selected_card = card
 	update_table_count(1)
 	update_hand_count(-1,card)
 	card.update_table_position(table_count,table_count)
+	card_description.text = card.description
+	
+	if card is ActionCard:
+		btn_play_card.visible = true
+
+func manage_table_click(card: BaseCard):
+	if move_locked:
+		return
+	
+	if table_count < 1:
+		return
+		
+	selected_card = null
+	update_hand_count(1)
+	table_count = table_count - 1
+	card.update_hand_position(hand_count,hand_count)
+	card_description.text = ''
+	
+	if card is ActionCard:
+		btn_play_card.visible = false
+
+
+func _on_btn_play_card_button_down() -> void:
+	if selected_card == null:
+		return
+	
+	await selected_card.play();
+	
+	handle_discard(selected_card)
+	selected_card = null
+	
+	table_count = table_count - 1
+	card_description.text = ''
+	btn_play_card.visible = false
+
+
+func handle_discard(card: BaseCard):
+	discard_count = discard_count + 1
+	card.discard(discard_count);
+
 
 func set_starter_hand():
 	var i = 1
@@ -86,7 +139,7 @@ func set_starter_hand():
 		card.update_hand_position(i,hand_count)
 		i = i+1
 
-func manage_deck_click(sender: BaseCard, lock = true):
+func manage_deck_click(sender: BaseCard):
 	if lock and move_locked:
 		return
 	
@@ -112,6 +165,13 @@ func get_support_card() -> SupportCard:
 	match randi_range(1,2):
 		1:	return Global.parry_scene.instantiate()
 		_:	return Global.protector_shield_scene.instantiate()
+
+
+func show_enemy(card: BaseCard):
+	card.on_mouse_entered()
+	await get_tree().create_timer(0.35).timeout
+	card.on_mouse_exited()
+	await get_tree().create_timer(0.35).timeout
 
 
 func _process(delta: float) -> void:
@@ -194,5 +254,3 @@ func set_camera_position(pos):
 		camera_pos.PREV_START:
 			$Game/Camera.position = Vector3(0.0, 2.6, -7.8)
 			$Game/Camera.rotation = Vector3(-0.785398, -3.141593, 0.0)
-	#banana
-	

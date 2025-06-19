@@ -4,7 +4,7 @@ extends SupportCard
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	description = 'Cant be attacked for 1 round'
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

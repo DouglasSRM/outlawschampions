@@ -1,7 +1,7 @@
 class_name ActionCard
 extends BaseCard
 
-var description
+const champion: ChampionCard = null
 
 func set_deck_position(pos: int) -> bool:
 	deck_position = pos
