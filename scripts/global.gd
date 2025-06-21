@@ -1,9 +1,9 @@
 extends Node
 
-var sender = null
-var champion2 = null
-var champion3 = null
-var champion4 = null
+var player_champion: ChampionCard = null
+var enemy_1: ChampionCard = null
+var enemy_2: ChampionCard = null
+var enemy_3: ChampionCard = null
 
 const basic_attack_scene       = preload("res://scenes/basic_attack.tscn")
 const opportunity_attack_scene = preload("res://scenes/opportunity_attack.tscn")

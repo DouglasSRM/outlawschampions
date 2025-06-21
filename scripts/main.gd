@@ -6,28 +6,18 @@ enum camera_pos {
 	PREV_START
 }
 
-@onready
-var card_description: Label = $GUI/Control/LblDescription
-@onready
-var health: Label = $GUI/Control/Health
-@onready
-var healthL: Label = $GUI/Control/HealthL
-@onready
-var healthU: Label = $GUI/Control/HealthU
-@onready
-var healthR: Label = $GUI/Control/HealthR
+@onready var card_description: Label = $GUI/Control/LblDescription
+@onready var health: Label = $GUI/Control/Health
+@onready var healthL: Label = $GUI/Control/HealthL
+@onready var healthU: Label = $GUI/Control/HealthU
+@onready var healthR: Label = $GUI/Control/HealthR
 
-@onready
-var btn_play_card: Button = $GUI/Control/BtnPlayCard
+@onready var btn_play_card: Button = $GUI/Control/BtnPlayCard
 
-@onready
-var champion: ChampionCard = null
-@onready
-var opponentL: ChampionCard = null
-@onready
-var opponentU: ChampionCard = null
-@onready
-var opponentR: ChampionCard = null
+@onready var champion: ChampionCard = null
+@onready var opponentL: ChampionCard = null
+@onready var opponentU: ChampionCard = null
+@onready var opponentR: ChampionCard = null
 
 const champion_position = Vector3(0,0,0.1)
 const opponentL_position = Vector3(1.8,0,0.9)
@@ -46,24 +36,8 @@ var move_locked = false
 
 
 func _ready() -> void:
-	if Global.sender is ChampionCard:
-		var move_duration = 0.7 # seconds
-		
-		champion = Global.sender 
-		$Game.add_child(champion)
-		champion.set_default_position(champion_position, move_duration)
-		
-		opponentL = Global.champion2
-		opponentU = Global.champion3
-		opponentR = Global.champion4
-		
-		$Game.add_child(opponentL)
-		$Game.add_child(opponentU)
-		$Game.add_child(opponentR)
-		
-		opponentL.set_default_position(opponentL_position, move_duration)
-		opponentU.set_default_position(opponentU_position, move_duration)
-		opponentR.set_default_position(opponentR_position, move_duration)
+	if Global.player_champion is ChampionCard:
+		define_champion_positions()
 		
 		set_camera_position(camera_pos.START)
 		create_action_cards(25)
@@ -71,6 +45,7 @@ func _ready() -> void:
 		
 		set_starter_hand()
 		btn_play_card.visible = false
+
 
 func manage_hand_click(card: BaseCard):
 	if move_locked:
@@ -109,6 +84,8 @@ func _on_btn_play_card_button_down() -> void:
 	if selected_card == null:
 		return
 	
+	btn_play_card.visible = false
+	
 	await selected_card.play();
 	
 	handle_discard(selected_card)
@@ -116,7 +93,6 @@ func _on_btn_play_card_button_down() -> void:
 	
 	table_count = table_count - 1
 	card_description.text = ''
-	btn_play_card.visible = false
 
 
 func handle_discard(card: BaseCard):
@@ -204,6 +180,7 @@ func create_action_cards(ammount: int):
 	action_deck_count = ammount
 	for i in range(ammount):
 		var card = get_action_card()
+		card.parent = self
 		card.state = BaseCard.IN_DECK
 		card.set_deck_position(i)
 		$Game.add_child(card)
@@ -213,6 +190,7 @@ func create_support_cards(ammount: int):
 	support_deck_count = ammount
 	for i in range(ammount):
 		var card = get_support_card()
+		card.parent = self
 		card.state = BaseCard.IN_DECK
 		card.set_deck_position(i)
 		$Game.add_child(card)
@@ -238,6 +216,31 @@ func update_hand_count(count: int, removed_card: BaseCard = null) -> bool:
 			else:
 				card.update_hand_position(card.hand_position-1, hand_count)
 	return true
+
+
+func define_champion_positions():
+	var move_duration = 0.7 # seconds
+	
+	champion = Global.player_champion 
+	$Game.add_child(champion)
+	champion.set_default_position(champion_position, move_duration)
+	champion.parent = self
+	
+	opponentL = Global.enemy_1
+	opponentU = Global.enemy_2
+	opponentR = Global.enemy_3
+	
+	opponentL.parent = self
+	opponentU.parent = self
+	opponentR.parent = self
+	
+	$Game.add_child(opponentL)
+	$Game.add_child(opponentU)
+	$Game.add_child(opponentR)
+	
+	opponentL.set_default_position(opponentL_position, move_duration)
+	opponentU.set_default_position(opponentU_position, move_duration)
+	opponentR.set_default_position(opponentR_position, move_duration)
 
 
 func lock():

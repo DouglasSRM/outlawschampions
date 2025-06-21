@@ -11,10 +11,9 @@ enum {
 	IN_DISCARD
 }
 
-@onready
-var parent = get_parent().get_parent()
+@onready var parent: Node3D
  
-var description = ''
+@export var description: String = 'Default description'
 
 var state = NONE
 var hand_position = 0
@@ -26,10 +25,10 @@ var entered = false
 var hand_pos = Vector3(0,0,0)
 var hover_pos = Vector3(0,0,0)
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	pass
-	#update_hand_position(0,1)
+
 
 func table_click():
 	parent.manage_table_click(self)

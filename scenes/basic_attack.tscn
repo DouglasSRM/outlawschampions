@@ -6,6 +6,7 @@
 
 [node name="BasicAttack" instance=ExtResource("1_ug8ir")]
 script = ExtResource("2_1ty0s")
+description = "Deals the base damage of your champion (x) to a random enemy"
 
 [node name="Sprite" parent="." index="0"]
 texture = ExtResource("3_5khvm")

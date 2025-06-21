@@ -6,6 +6,7 @@
 
 [node name="Parry" instance=ExtResource("1_h4n1m")]
 script = ExtResource("2_1h148")
+description = "Blocks attack and counter attacks with your base damage (x)"
 
 [node name="Sprite" parent="." index="0"]
 texture = ExtResource("3_lpk23")

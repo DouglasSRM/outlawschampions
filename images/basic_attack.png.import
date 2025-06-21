@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3kxoquwiycmq"
 path.s3tc="res://.godot/imported/basic_attack.png-284f2ff41eca3299c1dcb42d49944284.s3tc.ctex"
+path.etc2="res://.godot/imported/basic_attack.png-284f2ff41eca3299c1dcb42d49944284.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://images/basic_attack.png"
-dest_files=["res://.godot/imported/basic_attack.png-284f2ff41eca3299c1dcb42d49944284.s3tc.ctex"]
+dest_files=["res://.godot/imported/basic_attack.png-284f2ff41eca3299c1dcb42d49944284.s3tc.ctex", "res://.godot/imported/basic_attack.png-284f2ff41eca3299c1dcb42d49944284.etc2.ctex"]
 
 [params]
 

@@ -28,15 +28,13 @@ func update_status():
 		0: health_status = hStatus.DYING
 
 func set_default_position(pos: Vector3, dur):
-	parent = get_parent().get_parent()
-	
 	default_position = pos
 	update_hover_pos(default_position)
 	move_to_position(default_position, dur)
 
 func select():
-	Global.sender = self
-	get_parent().get_parent().change_scene()
+	Global.player_champion = self
+	parent.change_scene()
 
 
 func on_mouse_entered() -> void:
