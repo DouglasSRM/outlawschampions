@@ -57,11 +57,11 @@ func set_starter_hand():
 	# Game starts with 3 action cards and 3 support cards in the player's hand
 	while i <= 3:
 		var card = get_card_from_action_deck()
-		#card.update_hand_position(i,hand_count)
+		card.update_hand_position(i,hand_count)
 		i += 1
 	while i <= 6:
 		var card = get_card_from_support_deck()
-		#card.update_hand_position(i,hand_count)
+		card.update_hand_position(i,hand_count)
 		i += 1
 
 
@@ -69,10 +69,14 @@ func manage_deck_click(sender: BaseCard):
 	if self.move_locked:
 		return
 	
-	var card
-	match sender:
-		ActionCard: card = get_card_from_action_deck()
-		SupportCard: card = get_card_from_support_deck()
+	var card: BaseCard
+	
+	if sender is ActionCard:
+		card = get_card_from_action_deck()
+	elif sender is SupportCard:
+		card = get_card_from_support_deck()
+	else:
+		return
 	
 	update_hand_count(1)
 	card.update_hand_position(hand_count,hand_count)
@@ -89,32 +93,35 @@ func get_card_from_action_deck() -> BaseCard:
 	for card in get_cards(BaseCard.IN_DECK):
 		if card is ActionCard and (card.deck_position == action_deck_count-1):
 			action_deck_count -= 1
+			print(card.state)
 			return card
 	return null
 
 
 func get_card_from_support_deck() -> BaseCard:
+	print(support_deck_count)
 	for card in get_cards(BaseCard.IN_DECK):
+		print(card.deck_position)
 		if (card is SupportCard) and (card.deck_position == support_deck_count-1):
 			support_deck_count -= 1
+			print(card.state)
 			return card
 	return null
 
 
 func create_action_cards(ammount: int):
 	action_deck_count += ammount
-	for i in range(ammount):
+	for i in range(action_deck_count):
 		var card = get_action_card()
 		cards.add_child(card)
 		card.parent = self
 		card.state = BaseCard.IN_DECK
 		card.set_deck_position(i)
-		print('a')
 
 
 func create_support_cards(ammount: int):
 	support_deck_count += ammount
-	for i in range(ammount):
+	for i in range(support_deck_count):
 		var card = get_support_card()
 		cards.add_child(card)
 		card.parent = self
@@ -211,7 +218,7 @@ func get_cards(state: int) -> Array[BaseCard]:
 	
 	for card in cards.get_children():
 		if card.state == state:
-			print(card.state)
+			print('get_cards,',card.state)
 			result.append(card)
 	
 	return result
