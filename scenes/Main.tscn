@@ -14,6 +14,8 @@ size = Vector3(8.15, 0.5, 4.65)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_c01mt")
+action_deck_count = 100
+support_deck_count = 100
 
 [node name="Game" type="Node3D" parent="."]
 
@@ -36,6 +38,8 @@ transform = Transform3D(1, 0, 0, 0, 0.0339576, 0.999423, 0, -0.999423, 0.0339576
 
 [node name="Light3" type="DirectionalLight3D" parent="Game"]
 transform = Transform3D(1, 0, 0, 0, -0.975596, 0.219574, 0, -0.219574, -0.975596, 0, 3.79288, -16.4713)
+
+[node name="Cards" type="Node" parent="Game"]
 
 [node name="GUI" type="CanvasLayer" parent="."]
 physics_interpolation_mode = 2
