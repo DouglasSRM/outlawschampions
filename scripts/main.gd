@@ -43,8 +43,8 @@ func _ready() -> void:
 		define_champion_positions()
 		
 		set_camera_position(camera_pos.START)
-		create_action_cards(25)
-		create_support_cards(25)
+		create_action_cards(100)
+		create_support_cards(100)
 		
 		set_starter_hand()
 		btn_play_card.visible = false
@@ -54,32 +54,31 @@ func set_starter_hand():
 	self.hand_count = 6
 	
 	var i = 1
+	
 	# Game starts with 3 action cards and 3 support cards in the player's hand
-	while i <= 3:
-		var card = get_card_from_action_deck()
-		card.update_hand_position(i,hand_count)
-		i += 1
-	while i <= 6:
-		var card = get_card_from_support_deck()
-		card.update_hand_position(i,hand_count)
+	while i <= self.hand_count:
+		var card
+		
+		if i % 2 == 0:
+			card = get_card_from_action_deck()
+		else:
+			card = get_card_from_support_deck()
+		
+		card.hand_position = i
+		card.click()
 		i += 1
 
 
-func manage_deck_click(sender: BaseCard):
+func manage_deck_click(sender: BaseCard) -> BaseCard:
 	if self.move_locked:
 		return
 	
-	var card: BaseCard
-	
 	if sender is ActionCard:
-		card = get_card_from_action_deck()
+		return get_card_from_action_deck()
 	elif sender is SupportCard:
-		card = get_card_from_support_deck()
+		return get_card_from_support_deck()
 	else:
-		return
-	
-	update_hand_count(1)
-	card.update_hand_position(hand_count,hand_count)
+		return null
 
 
 func show_enemy(card: ChampionCard):
@@ -93,18 +92,14 @@ func get_card_from_action_deck() -> BaseCard:
 	for card in get_cards(BaseCard.IN_DECK):
 		if card is ActionCard and (card.deck_position == action_deck_count-1):
 			action_deck_count -= 1
-			print(card.state)
 			return card
 	return null
 
 
 func get_card_from_support_deck() -> BaseCard:
-	print(support_deck_count)
 	for card in get_cards(BaseCard.IN_DECK):
-		print(card.deck_position)
 		if (card is SupportCard) and (card.deck_position == support_deck_count-1):
 			support_deck_count -= 1
-			print(card.state)
 			return card
 	return null
 
@@ -113,20 +108,20 @@ func create_action_cards(ammount: int):
 	action_deck_count += ammount
 	for i in range(action_deck_count):
 		var card = get_action_card()
-		cards.add_child(card)
 		card.parent = self
 		card.state = BaseCard.IN_DECK
 		card.set_deck_position(i)
+		cards.add_child(card)
 
 
 func create_support_cards(ammount: int):
 	support_deck_count += ammount
 	for i in range(support_deck_count):
 		var card = get_support_card()
-		cards.add_child(card)
 		card.parent = self
 		card.state = BaseCard.IN_DECK
 		card.set_deck_position(i)
+		cards.add_child(card)
 
 
 func get_action_card() -> ActionCard:
@@ -152,6 +147,7 @@ func manage_hand_click(card: BaseCard):
 	update_table_count(1)
 	update_hand_count(-1,card)
 	card.update_table_position(table_count,table_count)
+	card.click()
 	lbl_card_description.text = card.description
 	
 	if card is ActionCard:
@@ -165,7 +161,8 @@ func manage_table_click(card: BaseCard):
 	selected_card = null
 	update_hand_count(1)
 	update_table_count(-1)
-	card.update_hand_position(hand_count,hand_count)
+	card.click()
+	#update_hand_position(hand_count,hand_count)
 	lbl_card_description.text = ''
 	
 	if card is ActionCard:
@@ -182,14 +179,20 @@ func update_table_count(count: int) -> bool:
 
 func update_hand_count(count: int, removed_card: BaseCard = null) -> bool:
 	hand_count += count
-
+	
 	for card in get_cards(BaseCard.IN_HAND):
 		if (removed_card == card):
 			continue
-		if (removed_card == null) or (card.hand_position < removed_card.hand_position):
-			card.update_hand_position(0, hand_count)
-		else:
-			card.update_hand_position(card.hand_position-1, hand_count)
+			
+		if (removed_card != null) and (card.hand_position > removed_card.hand_position):
+			card.hand_position -= 1
+		
+		card.update()
+		
+		#if (removed_card == null) or (card.hand_position < removed_card.hand_position):
+			#card.update_hand_position(0, hand_count)
+		#else:
+			#card.update_hand_position(card.hand_position-1, hand_count)
 	return true
 
 
@@ -218,7 +221,6 @@ func get_cards(state: int) -> Array[BaseCard]:
 	
 	for card in cards.get_children():
 		if card.state == state:
-			print('get_cards,',card.state)
 			result.append(card)
 	
 	return result

@@ -4,6 +4,7 @@ extends SupportCard
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	super()
 	description = 'Blocks attack and counter attacks with your base damage ('+str(Global.player_champion.power)+')'
 
 
