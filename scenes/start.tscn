@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://b0wnfho1jdj1h"]
 
 [ext_resource type="Script" uid="uid://cq845ifgwamcw" path="res://scripts/start.gd" id="1_0auqf"]
-[ext_resource type="PackedScene" uid="uid://c4evahqg8jtly" path="res://scenes/mage.tscn" id="1_kdmts"]
-[ext_resource type="PackedScene" uid="uid://cc4u01c30ok5y" path="res://scenes/paladin.tscn" id="2_0auqf"]
-[ext_resource type="PackedScene" uid="uid://bf8s0geh1flxk" path="res://scenes/druid.tscn" id="3_y16t7"]
-[ext_resource type="PackedScene" uid="uid://d3ih6it1bavcu" path="res://scenes/rogue.tscn" id="4_4ge6i"]
+[ext_resource type="PackedScene" uid="uid://c4evahqg8jtly" path="res://scenes/champions/mage.tscn" id="1_kdmts"]
+[ext_resource type="PackedScene" uid="uid://cc4u01c30ok5y" path="res://scenes/champions/paladin.tscn" id="2_0auqf"]
+[ext_resource type="PackedScene" uid="uid://bf8s0geh1flxk" path="res://scenes/champions/druid.tscn" id="3_y16t7"]
+[ext_resource type="PackedScene" uid="uid://d3ih6it1bavcu" path="res://scenes/champions/rogue.tscn" id="4_4ge6i"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ewcy1"]
 size = Vector3(8.25, 0.5, 4.65)

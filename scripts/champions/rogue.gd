@@ -1,9 +1,9 @@
-class_name Druid
+class_name Rogue
 extends ChampionCard
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	super()
 	max_health = 60
 	health = max_health
 	power = 5
@@ -11,6 +11,5 @@ func _ready() -> void:
 	mana = 0
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass

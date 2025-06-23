@@ -7,7 +7,9 @@ enum hStatus {
 	DYING
 }
 
-var default_position = Vector3(0,0,0)
+@onready var select_state: Node = $StateMachine/Select
+@onready var champion_state: Node = $StateMachine/Champion
+
 var health_status = hStatus.FULL
 var max_health: int
 var health: int
@@ -17,56 +19,27 @@ var mana: int
 
 func decrease_health(value):
 	health = max(0, health - value)
-	
 	update_status()
+
 
 func attack(champion: ChampionCard, damage := power):
 	champion.decrease_health(damage)
+
 
 func update_status():
 	match health:
 		0: health_status = hStatus.DYING
 
-func set_default_position(pos: Vector3, dur):
-	default_position = pos
-	update_hover_pos(default_position)
-	move_to_position(default_position, dur)
+
+func set_champion_state():
+	state_machine.change_state(champion_state)
+
 
 func select():
 	Global.player_champion = self
 	parent.change_scene()
 
 
-func on_mouse_entered() -> void:
-	super()
-	
-	if !parent:
-		return
-		
-		
-	if parent.move_locked:
-		return
-		
-	if state == CHAMPION:
-		entered = true		
-		move_to_position(hover_pos, 0.2)
-
-func on_mouse_exited() -> void:
-	super()
-	
-	if !parent:
-		return
-		
-	if parent.move_locked:
-		return
-	
-	if state == CHAMPION and entered == true:
-		entered = false
-		move_to_position(Vector3(default_position), 0.2)
-
 func _ready() -> void:
-	state = CHAMPION
-
-
-func _process(delta: float) -> void:
-	pass
+	if state_machine.current_state == null:
+		state_machine.init(self, select_state)

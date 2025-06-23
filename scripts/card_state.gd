@@ -1,7 +1,7 @@
 class_name CardState
 extends Node
 
-var parent: BaseCard
+var card: BaseCard
 
 func enter() -> void:
 	pass

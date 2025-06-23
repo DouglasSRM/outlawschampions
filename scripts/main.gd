@@ -29,10 +29,10 @@ const opponentU_position = Vector3(0,0,1.7)
 const opponentR_position = Vector3(-1.8,0,0.9)
 
 @export var hand_count: int = 0
-@export var table_count: int = 0
 @export var action_deck_count: int = 0
 @export var support_deck_count: int = 0
-@export var discard_count: int = 0
+var table_count: int = 0
+var discard_count: int = 0
 
 var selected_card: BaseCard
 var move_locked = false
@@ -41,21 +41,19 @@ var move_locked = false
 func _ready() -> void:
 	if Global.player_champion is ChampionCard:
 		define_champion_positions()
-		
 		set_camera_position(camera_pos.START)
-		create_action_cards(100)
-		create_support_cards(100)
 		
+		create_action_cards()
+		create_support_cards()
 		set_starter_hand()
-		btn_play_card.visible = false
 
 
 func set_starter_hand():
-	self.hand_count = 6
+	if hand_count == 0:
+		hand_count = 6
 	
 	var i = 1
 	
-	# Game starts with 3 action cards and 3 support cards in the player's hand
 	while i <= self.hand_count:
 		var card
 		
@@ -81,16 +79,9 @@ func manage_deck_click(sender: BaseCard) -> BaseCard:
 		return null
 
 
-func show_enemy(card: ChampionCard):
-	card.on_mouse_entered()
-	await get_tree().create_timer(0.35).timeout
-	card.on_mouse_exited()
-	await get_tree().create_timer(0.35).timeout
-
-
 func get_card_from_action_deck() -> BaseCard:
 	for card in get_cards(BaseCard.IN_DECK):
-		if card is ActionCard and (card.deck_position == action_deck_count-1):
+		if card is ActionCard and (card.deck_position == action_deck_count):
 			action_deck_count -= 1
 			return card
 	return null
@@ -98,86 +89,90 @@ func get_card_from_action_deck() -> BaseCard:
 
 func get_card_from_support_deck() -> BaseCard:
 	for card in get_cards(BaseCard.IN_DECK):
-		if (card is SupportCard) and (card.deck_position == support_deck_count-1):
+		if (card is SupportCard) and (card.deck_position == support_deck_count):
 			support_deck_count -= 1
 			return card
 	return null
 
 
-func create_action_cards(ammount: int):
-	action_deck_count += ammount
-	for i in range(action_deck_count):
-		var card = get_action_card()
+func create_action_cards():
+	if action_deck_count == 0:
+		action_deck_count = 25 #default
+	
+	for i in range(1,action_deck_count+1):
+		var card = create_action_card()
 		card.parent = self
 		card.state = BaseCard.IN_DECK
-		card.set_deck_position(i)
+		card.deck_position = i
 		cards.add_child(card)
 
 
-func create_support_cards(ammount: int):
-	support_deck_count += ammount
-	for i in range(support_deck_count):
-		var card = get_support_card()
+func create_support_cards():
+	if support_deck_count == 0:
+		support_deck_count = 25 #default
+	
+	for i in range(1,support_deck_count+1):
+		var card = create_support_card()
 		card.parent = self
 		card.state = BaseCard.IN_DECK
-		card.set_deck_position(i)
+		card.deck_position = i
 		cards.add_child(card)
 
 
-func get_action_card() -> ActionCard:
+func create_action_card() -> ActionCard:
 	match randi_range(1,2):
 		1:	return Global.basic_attack_scene.instantiate()
 		_:	return Global.opportunity_attack_scene.instantiate()
 
 
-func get_support_card() -> SupportCard:
+func create_support_card() -> SupportCard:
 	match randi_range(1,2):
 		1:	return Global.parry_scene.instantiate()
 		_:	return Global.protector_shield_scene.instantiate()
 
 
-func manage_hand_click(card: BaseCard):
+func manage_hand_click(card: BaseCard) -> bool:
 	if self.move_locked:
-		return
+		return false
 	
 	if table_count >= 1:
-		return
+		return false
 	
 	selected_card = card
 	update_table_count(1)
 	update_hand_count(-1,card)
-	card.update_table_position(table_count,table_count)
-	card.click()
-	lbl_card_description.text = card.description
 	
+	lbl_card_description.text = card.description
 	if card is ActionCard:
 		btn_play_card.visible = true
+	
+	return true
 
 
-func manage_table_click(card: BaseCard):
+func manage_table_click(card: BaseCard) -> bool:
 	if (self.move_locked) or (table_count < 1):
-		return
+		return false
 	
 	selected_card = null
 	update_hand_count(1)
 	update_table_count(-1)
 	card.click()
-	#update_hand_position(hand_count,hand_count)
-	lbl_card_description.text = ''
 	
+	lbl_card_description.text = ''
 	if card is ActionCard:
 		btn_play_card.visible = false
-
-
-func update_table_count(count: int) -> bool:
-	table_count += count
-
-	for card in get_cards(BaseCard.IN_TABLE):
-		card.update_table_position(0, table_count)
+		
 	return true
 
 
-func update_hand_count(count: int, removed_card: BaseCard = null) -> bool:
+func update_table_count(count: int):
+	table_count += count
+	
+	for card in get_cards(BaseCard.IN_TABLE):
+		card.update()
+
+
+func update_hand_count(count: int, removed_card: BaseCard = null):
 	hand_count += count
 	
 	for card in get_cards(BaseCard.IN_HAND):
@@ -188,12 +183,6 @@ func update_hand_count(count: int, removed_card: BaseCard = null) -> bool:
 			card.hand_position -= 1
 		
 		card.update()
-		
-		#if (removed_card == null) or (card.hand_position < removed_card.hand_position):
-			#card.update_hand_position(0, hand_count)
-		#else:
-			#card.update_hand_position(card.hand_position-1, hand_count)
-	return true
 
 
 func _on_btn_play_card_button_down() -> void:
@@ -208,12 +197,19 @@ func _on_btn_play_card_button_down() -> void:
 	lbl_card_description.text = ''
 
 
+func show_enemy(card: ChampionCard):
+	card.do_hover_animation()
+	await get_tree().create_timer(0.35).timeout
+	card.do_exit_hover_animation()
+	await get_tree().create_timer(0.35).timeout
+
+
 func handle_discard(card: BaseCard):
 	if card.state == BaseCard.IN_TABLE:
 		table_count -= 1
 	
 	discard_count += 1
-	card.discard(discard_count)
+	card.discard()
 
 
 func get_cards(state: int) -> Array[BaseCard]:
@@ -227,33 +223,37 @@ func get_cards(state: int) -> Array[BaseCard]:
 
 
 func define_champion_positions():
-	var move_duration = 0.7 # seconds
-	
 	champion = Global.player_champion 
 	cards.add_child(champion)
-	champion.set_default_position(champion_position, move_duration)
 	champion.parent = self
+	champion.default_position = champion_position
+	champion.set_champion_state()
 	
 	opponentL = Global.enemy_1
 	opponentU = Global.enemy_2
 	opponentR = Global.enemy_3
 	
-	opponentL.parent = self
-	opponentU.parent = self
-	opponentR.parent = self
-	
 	cards.add_child(opponentL)
 	cards.add_child(opponentU)
 	cards.add_child(opponentR)
 	
-	opponentL.set_default_position(opponentL_position, move_duration)
-	opponentU.set_default_position(opponentU_position, move_duration)
-	opponentR.set_default_position(opponentR_position, move_duration)
+	opponentL.parent = self
+	opponentU.parent = self
+	opponentR.parent = self
+	
+	opponentL.default_position = opponentL_position
+	opponentU.default_position = opponentU_position
+	opponentR.default_position = opponentR_position
+	
+	opponentL.set_champion_state()
+	opponentU.set_champion_state()
+	opponentR.set_champion_state()
 
 
 func lock():
 	self.move_locked = true
-	
+
+
 func unlock():
 	self.move_locked = false
 
