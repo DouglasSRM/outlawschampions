@@ -106,6 +106,7 @@ offset_bottom = -0.248001
 theme_override_font_sizes/font_size = 20
 
 [node name="BtnPlayCard" type="Button" parent="GUI/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.73

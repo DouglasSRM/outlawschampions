@@ -1,15 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://c4evahqg8jtly"]
 
 [ext_resource type="PackedScene" uid="uid://pxwdlllhrxt5" path="res://scenes/champion_card.tscn" id="1_j2dsb"]
-[ext_resource type="Script" uid="uid://bivigmp4vm2k0" path="res://scripts/mage.gd" id="2_t2cfv"]
+[ext_resource type="Script" uid="uid://bivigmp4vm2k0" path="res://scripts/champions/mage.gd" id="2_t2cfv"]
 [ext_resource type="Texture2D" uid="uid://bt7mbbdmyml5v" path="res://images/mage.png" id="2_y6d06"]
 
 [node name="Mage" instance=ExtResource("1_j2dsb")]
 script = ExtResource("2_t2cfv")
 
-[node name="Sprite" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="BaseSprite" parent="." index="0"]
 texture = ExtResource("2_y6d06")
-
-[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
-[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]

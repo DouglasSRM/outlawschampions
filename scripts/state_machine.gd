@@ -7,12 +7,10 @@ var current_state: CardState
 
 
 func init(parent: BaseCard, state: CardState = null) -> void:
-	print('a')
 	for child in get_children():
-		child.parent = parent
+		child.card = parent
 	
 	if state != null:
-		print('a')
 		starting_state = state
 	
 	change_state(starting_state)
@@ -35,15 +33,14 @@ func mouse_enter() -> void:
 	if new_state:
 		change_state(new_state)
 
+
 func mouse_leave() -> void:
 	var new_state = current_state.mouse_leave()
 	if new_state:
 		change_state(new_state)
 
+
 func process_click() -> void:
-	print(current_state)
 	var new_state = current_state.process_click()
 	if new_state:
 		change_state(new_state)
-	
-	print(current_state)

@@ -2,13 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://pxwdlllhrxt5" path="res://scenes/champion_card.tscn" id="1_b3c45"]
 [ext_resource type="Texture2D" uid="uid://d4h6brbwf1ngq" path="res://images/rogue.png" id="2_jg2lv"]
-[ext_resource type="Script" uid="uid://c25bkks7ny1fh" path="res://scripts/rogue.gd" id="2_wbss4"]
+[ext_resource type="Script" uid="uid://c25bkks7ny1fh" path="res://scripts/champions/rogue.gd" id="2_wbss4"]
 
 [node name="Rogue" instance=ExtResource("1_b3c45")]
 script = ExtResource("2_wbss4")
 
-[node name="Sprite" parent="." index="0"]
+[node name="BaseSprite" parent="." index="0"]
 texture = ExtResource("2_jg2lv")
-
-[connection signal="mouse_entered" from="Sprite/Body" to="." method="_on_body_mouse_entered"]
-[connection signal="mouse_exited" from="Sprite/Body" to="." method="_on_body_mouse_exited"]
