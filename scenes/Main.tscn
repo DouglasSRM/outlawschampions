@@ -37,6 +37,8 @@ transform = Transform3D(1, 0, 0, 0, 0.0339576, 0.999423, 0, -0.999423, 0.0339576
 [node name="Light3" type="DirectionalLight3D" parent="Game"]
 transform = Transform3D(1, 0, 0, 0, -0.975596, 0.219574, 0, -0.219574, -0.975596, 0, 3.79288, -16.4713)
 
+[node name="Cards" type="Node" parent="Game"]
+
 [node name="GUI" type="CanvasLayer" parent="."]
 physics_interpolation_mode = 2
 
@@ -104,6 +106,7 @@ offset_bottom = -0.248001
 theme_override_font_sizes/font_size = 20
 
 [node name="BtnPlayCard" type="Button" parent="GUI/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.73

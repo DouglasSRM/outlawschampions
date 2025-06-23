@@ -1,10 +1,11 @@
-class_name ProtectorShield
+class_name Parry
 extends SupportCard
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	description = 'Cant be attacked for 1 round'
+	super()
+	description = 'Blocks attack and counter attacks with your base damage ('+str(Global.player_champion.power)+')'
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

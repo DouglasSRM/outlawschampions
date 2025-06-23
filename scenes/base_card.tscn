@@ -1,9 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://drop5ptepg5rb"]
+[gd_scene load_steps=12 format=3 uid="uid://drop5ptepg5rb"]
 
 [ext_resource type="Script" uid="uid://c50h160mqhm2b" path="res://scripts/base_card.gd" id="1_unfoy"]
 [ext_resource type="Texture2D" uid="uid://qgys0ouhv1vs" path="res://images/cover.png" id="2_ewi80"]
 [ext_resource type="Script" uid="uid://c47b3bfjpsxs0" path="res://scripts/card_sprite.gd" id="3_wivmf"]
-[ext_resource type="Script" uid="uid://dl6jem0us7ohm" path="res://scripts/card_body.gd" id="4_ya72j"]
+[ext_resource type="Script" uid="uid://dg4x70sn75w1l" path="res://scripts/state_machine.gd" id="5_ewi80"]
+[ext_resource type="Script" uid="uid://bn8ys5x8ytrlv" path="res://scripts/states/deck.gd" id="6_wivmf"]
+[ext_resource type="Script" uid="uid://bjstqwa2le8rn" path="res://scripts/states/hand.gd" id="7_ya72j"]
+[ext_resource type="Script" uid="uid://bv4td46aac5kj" path="res://scripts/states/table.gd" id="8_k2mc5"]
+[ext_resource type="Script" uid="uid://fbgvrcycx26t" path="res://scripts/states/select.gd" id="8_pfjhk"]
+[ext_resource type="Script" uid="uid://ct6tdue24w12y" path="res://scripts/states/discard.gd" id="9_pfjhk"]
+[ext_resource type="Script" uid="uid://bh4rdesywvn37" path="res://scripts/states/champion.gd" id="10_vpv4f"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s4mse"]
 margin = 0.0
@@ -12,16 +18,15 @@ size = Vector3(0.54, 0.81, 0.01)
 [node name="BaseCard" type="Node3D"]
 script = ExtResource("1_unfoy")
 
-[node name="Sprite" type="Sprite3D" parent="."]
+[node name="BaseSprite" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
 pixel_size = 0.0006
 texture = ExtResource("2_ewi80")
 script = ExtResource("3_wivmf")
 
-[node name="Body" type="StaticBody3D" parent="Sprite"]
-script = ExtResource("4_ya72j")
+[node name="Body" type="StaticBody3D" parent="BaseSprite"]
 
-[node name="Collision" type="CollisionShape3D" parent="Sprite/Body"]
+[node name="Collision" type="CollisionShape3D" parent="BaseSprite/Body"]
 shape = SubResource("BoxShape3D_s4mse")
 
 [node name="CoverSprite" type="Sprite3D" parent="."]
@@ -29,6 +34,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.001)
 pixel_size = 0.0006
 texture = ExtResource("2_ewi80")
 
-[connection signal="input_event" from="Sprite/Body" to="Sprite/Body" method="_on_input_event"]
-[connection signal="mouse_entered" from="Sprite/Body" to="Sprite/Body" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="Sprite/Body" to="Sprite/Body" method="_on_mouse_exited"]
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("5_ewi80")
+
+[node name="Deck" type="Node" parent="StateMachine"]
+script = ExtResource("6_wivmf")
+
+[node name="Hand" type="Node" parent="StateMachine"]
+script = ExtResource("7_ya72j")
+
+[node name="Table" type="Node" parent="StateMachine"]
+script = ExtResource("8_k2mc5")
+
+[node name="Select" type="Node" parent="StateMachine"]
+script = ExtResource("8_pfjhk")
+
+[node name="Discard" type="Node" parent="StateMachine"]
+script = ExtResource("9_pfjhk")
+
+[node name="Champion" type="Node" parent="StateMachine"]
+script = ExtResource("10_vpv4f")
+
+[connection signal="input_event" from="BaseSprite/Body" to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="BaseSprite/Body" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="BaseSprite/Body" to="." method="_on_mouse_exited"]

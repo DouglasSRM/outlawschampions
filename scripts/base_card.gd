@@ -12,47 +12,55 @@ enum {
 }
 
 @onready var parent: Node3D
- 
+@onready var state_machine: CardStateMachine = $StateMachine
+@onready var discard_state: Node = $StateMachine/Discard
+
 @export var description: String = 'Default description'
 
 var state = NONE
-var hand_position = 0
-var table_position = 0
-var deck_position = 0
+var hand_position    = 0
+var table_position   = 0
+var deck_position    = 0
 var discard_position = 0
 
-var entered = false
-var hand_pos = Vector3(0,0,0)
-var hover_pos = Vector3(0,0,0)
+var hover = false
+var default_position = Vector3(0,0,0)
+var hover_position = Vector3(0,0,0)
 
 
-func _ready() -> void:
-	pass
+func handle_table_click() -> bool:
+	return parent.manage_table_click(self)
 
 
-func table_click():
-	parent.manage_table_click(self)
+func handle_hand_click():
+	return parent.manage_hand_click(self)
 
-func hand_click():
-	parent.manage_hand_click(self)
+
+func update():
+	state_machine.update()
+
+
+func click():
+	state_machine.process_click()
+
+
+func _on_mouse_entered() -> void:
+	state_machine.mouse_enter()
+
+
+func _on_mouse_exited() -> void:
+	state_machine.mouse_leave()
+
 
 func deck_click():
-	parent.manage_deck_click(self)
-
-func set_texture(texture: Texture2D) -> bool:
-	$Sprite.texture = texture
-	$Sprite.update_sprite_scale()
-	return true
-
-func set_deck_position(pos: int) -> bool:
-	return true
+	var card: BaseCard = parent.manage_deck_click(self)
+	if card:
+		parent.update_hand_count(1)
+		card.click()
 
 
-func discard(pos: int):
-	discard_position = pos
-	var y = pos * 0.005
-	rotation = Vector3(deg_to_rad(90), deg_to_rad(-90), 0.0)
-	move_state(Vector3(3, y, -0.9), IN_DISCARD)
+func discard():
+	state_machine.change_state(discard_state)
 
 
 func play() -> bool:
@@ -60,91 +68,75 @@ func play() -> bool:
 	return true
 
 
-func update_table_position(pos: int, total: int) -> bool:	
-	hand_position = 0
+func get_table_count() -> int:
+	return parent.table_count;
 	
-	if pos != 0: # 0 mantem a posição atual
-		table_position = pos
-	
-	var z: float = -0.85 # table
-	var card_distance = 0.6
-	# calcula a posição inicial das cartas
-	var initial_position = ((card_distance * (total - 1)) / 2)
-	
-	# diminui em 0.6 a posição x para cada carta
-	var x: float = initial_position - (card_distance * (table_position - 1))
-	
-	var table_pos = Vector3(x, 0, z)
-	move_state(table_pos, IN_TABLE)
-	return true
 
-func update_hand_position(pos: int, total: int) -> bool:	
-	deck_position = 0
-	
-	if pos != 0: # 0 mantem a posição atual
-		hand_position = pos
-	
-	var z = -1.75 # hand
-	
-	var card_distance = 0.6
-	# calcula a posição inicial das cartas
-	var initial_position = ((card_distance * (total - 1)) / 2)
-	
-	# diminui em 0.6 a posição x para cada carta
-	var x: float = initial_position - (card_distance * (hand_position - 1))
-	
-	hand_pos = Vector3(x, 0, z)
-	
-	update_hover_pos(hand_pos)
-	move_state(hand_pos, IN_HAND)
-	rotation = Vector3(deg_to_rad(-90), deg_to_rad(180), 0.0)
-	
-	return true
+func get_hand_count() -> int:
+	return parent.hand_count;
 
-func update_hover_pos(pos: Vector3 = position):
+
+func get_discard_count() -> int:
+	return parent.discard_count;
+
+
+func update_hover_position(pos: Vector3 = position):
 	var pos_x = (pos[0] / 4) * 3.07
 	var pos_y = 0.7  
 	var pos_z = pos[2] - (pos[2] / 4.23)
-	hover_pos = Vector3(pos_x, pos_y, pos_z)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	
+	hover_position = Vector3(pos_x, pos_y, pos_z)
 
 
 func move_state(target_position: Vector3, new_state):
-	parent.lock()
+	lock()
 	
 	var duration = 0.5
 	var tween = create_tween()
 	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
 	await tween.finished
 	state = new_state
 	
-	parent.unlock()
-
-func on_mouse_entered() -> void:
-	if !parent:
-		return
-	
-	if parent.move_locked:
-		return
-		
-	if state == IN_HAND or state == SELECT:
-		entered = true		
-		move_to_position(hover_pos, 0.2)
+	unlock()
 
 
-func on_mouse_exited() -> void:
-	if !parent:
-		return
-	
-	if parent.move_locked:
-		return
-	
-	if (state == IN_HAND or state == SELECT) and entered == true:
-		entered = false
-		move_to_position(Vector3(hand_pos), 0.2)
+func select():
+	pass
+
+
+func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		match state:
+			IN_DECK: deck_click() # When any card of the deck is clicked, the click event will be executed for the first card of the deck.
+			_: click()
+
+
+func is_locked_for_movement() -> bool:
+	if parent:
+		return parent.move_locked
+	return true
+
+
+func lock() -> void:
+	if parent:
+		parent.lock()
+
+
+func unlock() -> void:
+	if parent:
+		parent.unlock()
+
+
+func do_hover_animation() -> void:
+	hover = true
+	move_to_position(hover_position, 0.2)
+
+
+func do_exit_hover_animation() -> void:
+	hover = false
+	move_to_position(Vector3(default_position), 0.2)
+
 
 func move_to_position(target_position: Vector3, duration: float):
 	var tween = create_tween()

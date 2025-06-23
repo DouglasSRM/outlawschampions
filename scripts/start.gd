@@ -4,12 +4,10 @@ var move_locked: bool = false
 
 @onready var cards: Node = $"3D/Cards"
 
+
 func _ready() -> void:
 	for card in cards.get_children():
 		card.parent = self
-		card.hand_pos = card.position
-		card.update_hover_pos()
-		card.state = BaseCard.SELECT
 
 
 func change_scene() -> void:

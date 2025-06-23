@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfehtjmvrff5b"]
+
+[ext_resource type="PackedScene" uid="uid://dw80bpuaqwbb" path="res://scenes/action_card.tscn" id="1_xit1f"]
+[ext_resource type="Script" uid="uid://vgsvmhs4o77s" path="res://scripts/action/opportunity_attack.gd" id="2_c7aj2"]
+[ext_resource type="Texture2D" uid="uid://coxqp1gyes1jg" path="res://images/opportunity_attack.png" id="3_tvesm"]
+
+[node name="OpportunityAttack" instance=ExtResource("1_xit1f")]
+script = ExtResource("2_c7aj2")
+
+[node name="BaseSprite" parent="." index="0"]
+texture = ExtResource("3_tvesm")
