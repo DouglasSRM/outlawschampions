@@ -18,7 +18,7 @@ func play() -> bool:
 		_: enemy = Global.enemy_3
 	
 	enemy.decrease_health(damage)
-	parent.show_enemy(enemy)
+	parent.pop_card(enemy)
 	
 	return await super()
 

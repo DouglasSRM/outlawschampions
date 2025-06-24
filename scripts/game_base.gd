@@ -2,9 +2,10 @@ class_name GameScene
 extends Node3D
 
 enum camera_pos {
-	START,
-	PREV_START
+	START
 }
+
+signal loaded
 
 @onready var cards: Node = $Game/Cards
 
@@ -17,6 +18,8 @@ enum camera_pos {
 @onready var healthR: Label = $GUI/Control/HealthR
 
 @onready var btn_play_card: Button = $GUI/Control/BtnPlayCard
+
+@onready var state_machine: GameStateMachine = $StateMachine
 
 @onready var champion: ChampionCard = null
 @onready var opponentL: ChampionCard = null
@@ -34,18 +37,21 @@ const opponentR_position = Vector3(-1.8,0,0.9)
 var table_count: int = 0
 var discard_count: int = 0
 
+## How many support cards can the player currently buy
+var can_buy_support: int = 0
+## How many action cards can the player currently buy
+var can_buy_action: int = 0
+
 var selected_card: BaseCard
 var move_locked = false
 
 
 func _ready() -> void:
-	if Global.player_champion is ChampionCard:
-		define_champion_positions()
-		set_camera_position(camera_pos.START)
-		
-		create_action_cards()
-		create_support_cards()
-		set_starter_hand()
+	state_machine.init(self)
+
+
+func _on_loaded() -> void:
+	state_machine.start_game()
 
 
 func set_starter_hand():
@@ -72,14 +78,26 @@ func manage_deck_click(sender: BaseCard) -> BaseCard:
 		return
 	
 	if sender is ActionCard:
-		return get_card_from_action_deck()
+		return process_action_deck_click()
 	elif sender is SupportCard:
-		return get_card_from_support_deck()
+		return process_support_deck_click()
 	else:
 		return null
 
 
-func get_card_from_action_deck() -> BaseCard:
+func process_action_deck_click() -> ActionCard:
+	if state_machine.process_action_deck_click():
+		return get_card_from_action_deck()
+	return null
+
+
+func process_support_deck_click() -> SupportCard:
+	if state_machine.process_support_deck_click():
+		return get_card_from_support_deck()
+	return null
+
+
+func get_card_from_action_deck() -> ActionCard:
 	for card in get_cards(BaseCard.IN_DECK):
 		if card is ActionCard and (card.deck_position == action_deck_count):
 			action_deck_count -= 1
@@ -87,7 +105,7 @@ func get_card_from_action_deck() -> BaseCard:
 	return null
 
 
-func get_card_from_support_deck() -> BaseCard:
+func get_card_from_support_deck() -> SupportCard:
 	for card in get_cards(BaseCard.IN_DECK):
 		if (card is SupportCard) and (card.deck_position == support_deck_count):
 			support_deck_count -= 1
@@ -197,7 +215,7 @@ func _on_btn_play_card_button_down() -> void:
 	lbl_card_description.text = ''
 
 
-func show_enemy(card: ChampionCard):
+func pop_card(card: BaseCard):
 	card.do_hover_animation()
 	await get_tree().create_timer(0.35).timeout
 	card.do_exit_hover_animation()

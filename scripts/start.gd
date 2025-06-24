@@ -25,7 +25,7 @@ func change_scene() -> void:
 			enemy_index += 1
 			cards.remove_child(card)
 			
-	get_tree().change_scene_to_file("res://scenes/Main.tscn")
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 func lock():
 	move_locked = true

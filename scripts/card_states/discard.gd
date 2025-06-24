@@ -5,7 +5,8 @@ func enter() -> void:
 	card.discard_position = card.get_discard_count()
 	var y = card.discard_position * 0.005
 	card.rotation = Vector3(deg_to_rad(90), deg_to_rad(-90), 0.0)
-	card.move_state(Vector3(3, y, -0.9), BaseCard.IN_DISCARD)
+	card.move_to_position(Vector3(3, y, -0.9), 0.5)
+	card.state = BaseCard.IN_DISCARD
 
 
 func exit() -> void:

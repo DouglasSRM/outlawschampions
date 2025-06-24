@@ -1,6 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://8yke3hj82k58"]
+[gd_scene load_steps=9 format=3 uid="uid://8yke3hj82k58"]
 
-[ext_resource type="Script" uid="uid://cl8126njaxgsh" path="res://scripts/main.gd" id="1_c01mt"]
+[ext_resource type="Script" uid="uid://cl8126njaxgsh" path="res://scripts/game_base.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://37iaihodyu14" path="res://scripts/game_state_machine.gd" id="2_yqjtg"]
+[ext_resource type="Script" uid="uid://btr5fqto5cmbj" path="res://scripts/game_states/loading.gd" id="3_lnu2h"]
+[ext_resource type="Script" uid="uid://d4dgd2ugielfx" path="res://scripts/game_states/buying_support.gd" id="4_lbhrr"]
+[ext_resource type="Script" uid="uid://bbofictnr7eqc" path="res://scripts/game_states/equip.gd" id="5_iywne"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qnwvq"]
 size = Vector3(8.25, 0.5, 4.65)
@@ -12,8 +16,8 @@ albedo_color = Color(0.25098, 0.247059, 0.541176, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_rvslj"]
 size = Vector3(8.15, 0.5, 4.65)
 
-[node name="Main" type="Node3D"]
-script = ExtResource("1_c01mt")
+[node name="GameScene" type="Node3D"]
+script = ExtResource("1_uwrxv")
 
 [node name="Game" type="Node3D" parent="."]
 
@@ -137,4 +141,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_yqjtg")
+
+[node name="Loading" type="Node" parent="StateMachine"]
+script = ExtResource("3_lnu2h")
+
+[node name="BuyingSupport" type="Node" parent="StateMachine"]
+script = ExtResource("4_lbhrr")
+
+[node name="Equip" type="Node" parent="StateMachine"]
+script = ExtResource("5_iywne")
+
+[connection signal="loaded" from="." to="." method="_on_loaded"]
 [connection signal="button_down" from="GUI/Control/BtnPlayCard" to="." method="_on_btn_play_card_button_down"]

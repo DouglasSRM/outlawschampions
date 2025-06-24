@@ -1,6 +1,9 @@
 class_name BaseCard
 extends Node3D
 
+## The base card object used to structure base properties and methods
+## for champions and usable cards.
+
 enum {
 	NONE,
 	SELECT,
@@ -17,22 +20,22 @@ enum {
 
 @export var description: String = 'Default description'
 
-var state = NONE
-var hand_position    = 0
-var table_position   = 0
-var deck_position    = 0
-var discard_position = 0
+var state           : int = NONE
+var hand_position   : int = 0
+var table_position  : int = 0
+var deck_position   : int = 0
+var discard_position: int = 0
 
-var hover = false
-var default_position = Vector3(0,0,0)
-var hover_position = Vector3(0,0,0)
+var hover: bool = false
+var default_position: Vector3 = Vector3(0,0,0)
+var hover_position  : Vector3 = Vector3(0,0,0)
 
 
 func handle_table_click() -> bool:
 	return parent.manage_table_click(self)
 
 
-func handle_hand_click():
+func handle_hand_click() -> bool:
 	return parent.manage_hand_click(self)
 
 
@@ -136,6 +139,11 @@ func do_hover_animation() -> void:
 func do_exit_hover_animation() -> void:
 	hover = false
 	move_to_position(Vector3(default_position), 0.2)
+
+
+func set_default_position(pos: Vector3 = position):
+	self.default_position = pos
+	update_hover_position(pos)
 
 
 func move_to_position(target_position: Vector3, duration: float):
