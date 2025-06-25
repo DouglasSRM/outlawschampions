@@ -28,13 +28,13 @@ func exit() -> void:
 
 
 func mouse_enter() -> CardState:
-	if !card.is_locked_for_movement():
+	if card.can_hover():
 		card.do_hover_animation()
 	return null
 
 
 func mouse_leave() -> CardState:
-	if !card.is_locked_for_movement() and card.hover:
+	if card.can_hover() and card.hover:
 		card.do_exit_hover_animation()
 	return null
 

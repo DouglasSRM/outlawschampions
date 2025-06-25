@@ -9,6 +9,15 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
+func allow_hand_click(card: BaseCard) -> bool:
+	return false
+
+func handle_hover(card: BaseCard) -> bool:
+	return false
+
+func handle_play_button() -> GameState:
+	return null
+
 func start_game() -> GameState:
 	return null
 

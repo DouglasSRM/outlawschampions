@@ -34,7 +34,7 @@ const opponentR_position = Vector3(-1.8,0,0.9)
 @export var hand_count: int = 0
 @export var action_deck_count: int = 0
 @export var support_deck_count: int = 0
-var table_count: int = 0
+var table_count: int = 5
 var discard_count: int = 0
 
 ## How many support cards can the player currently buy
@@ -71,6 +71,10 @@ func set_starter_hand():
 		card.hand_position = i
 		card.click()
 		i += 1
+
+
+func allow_hand_click(card: BaseCard) -> bool:
+	return state_machine.allow_hand_click(card)
 
 
 func manage_deck_click(sender: BaseCard) -> BaseCard:
@@ -153,16 +157,16 @@ func manage_hand_click(card: BaseCard) -> bool:
 	if self.move_locked:
 		return false
 	
-	if table_count >= 1:
+	if selected_card:
 		return false
 	
 	selected_card = card
-	update_table_count(1)
+	#update_table_count(1)
 	update_hand_count(-1,card)
 	
 	lbl_card_description.text = card.description
-	if card is ActionCard:
-		btn_play_card.visible = true
+	#if card is ActionCard:
+	btn_play_card.visible = true
 	
 	return true
 
@@ -173,12 +177,12 @@ func manage_table_click(card: BaseCard) -> bool:
 	
 	selected_card = null
 	update_hand_count(1)
-	update_table_count(-1)
+	#update_table_count(-1)
 	card.click()
 	
 	lbl_card_description.text = ''
-	if card is ActionCard:
-		btn_play_card.visible = false
+	#if card is ActionCard:
+	btn_play_card.visible = false
 		
 	return true
 
@@ -196,23 +200,32 @@ func update_hand_count(count: int, removed_card: BaseCard = null):
 	for card in get_cards(BaseCard.IN_HAND):
 		if (removed_card == card):
 			continue
-			
+		
 		if (removed_card != null) and (card.hand_position > removed_card.hand_position):
 			card.hand_position -= 1
 		
 		card.update()
 
 
-func _on_btn_play_card_button_down() -> void:
+func play_card() -> bool:
 	if selected_card == null:
-		return
+		return false
 	
 	btn_play_card.visible = false
 	await selected_card.play();
 	
-	handle_discard(selected_card)
 	selected_card = null
 	lbl_card_description.text = ''
+	
+	return true
+
+
+func _on_btn_play_card_button_down() -> void:
+	state_machine.handle_play_button()
+
+
+func manage_hover(card: BaseCard) -> bool:
+	return state_machine.handle_hover(card)
 
 
 func pop_card(card: BaseCard):
@@ -222,9 +235,14 @@ func pop_card(card: BaseCard):
 	await get_tree().create_timer(0.35).timeout
 
 
+func handle_equip(card: BaseCard):
+	card.table_position = 1
+	card.update()
+
+
 func handle_discard(card: BaseCard):
-	if card.state == BaseCard.IN_TABLE:
-		table_count -= 1
+	#if card.state == BaseCard.IN_TABLE:
+		#table_count -= 1
 	
 	discard_count += 1
 	card.discard()

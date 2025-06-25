@@ -10,6 +10,10 @@ func _ready() -> void:
 		card.parent = self
 
 
+func manage_hover(card: BaseCard) -> bool:
+	return true
+
+
 func change_scene() -> void:
 	cards.remove_child(Global.player_champion)
 	Global.player_champion.state = BaseCard.CHAMPION

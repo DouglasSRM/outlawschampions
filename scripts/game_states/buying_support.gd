@@ -15,6 +15,12 @@ func enter() -> void:
 	parent.pop_card(card)
 
 
+func handle_hover(card: BaseCard) -> bool:
+	#if card is ChampionCard:
+		#return true
+	return false
+
+
 func process_support_deck_click() -> GameState:
 	parent.can_buy_support -= 1
 	print('a')

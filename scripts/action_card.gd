@@ -13,5 +13,10 @@ func _ready() -> void:
 	champion = Global.player_champion
 
 
+func play() -> bool:
+	await super()
+	parent.handle_discard(self)
+	return true
+
 func _process(delta: float) -> void:
 	pass

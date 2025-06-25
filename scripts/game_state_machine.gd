@@ -20,6 +20,20 @@ func change_state(new_state: GameState) -> void:
 	current_state.enter()
 
 
+func allow_hand_click(card: BaseCard) -> bool:
+	return current_state.allow_hand_click(card)
+
+
+func handle_hover(card: BaseCard) -> bool:
+	return current_state.handle_hover(card)
+
+
+func handle_play_button():
+	var new_state = current_state.handle_play_button()
+	if new_state:
+		change_state(new_state)
+
+
 func process_action_deck_click() -> bool:
 	var new_state = current_state.process_action_deck_click()
 	if new_state:
@@ -29,7 +43,6 @@ func process_action_deck_click() -> bool:
 
 
 func process_support_deck_click() -> bool:
-	print(current_state)
 	var new_state = current_state.process_support_deck_click()
 	if new_state:
 		change_state(new_state)

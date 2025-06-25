@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://drop5ptepg5rb"]
+[gd_scene load_steps=13 format=3 uid="uid://drop5ptepg5rb"]
 
 [ext_resource type="Script" uid="uid://c50h160mqhm2b" path="res://scripts/base_card.gd" id="1_unfoy"]
 [ext_resource type="Texture2D" uid="uid://qgys0ouhv1vs" path="res://images/cover.png" id="2_ewi80"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bv4td46aac5kj" path="res://scripts/card_states/table.gd" id="8_k2mc5"]
 [ext_resource type="Script" uid="uid://fbgvrcycx26t" path="res://scripts/card_states/select.gd" id="8_pfjhk"]
 [ext_resource type="Script" uid="uid://ct6tdue24w12y" path="res://scripts/card_states/discard.gd" id="9_pfjhk"]
+[ext_resource type="Script" uid="uid://bf0emiarkcvq3" path="res://scripts/card_states/equiped.gd" id="9_s58hd"]
 [ext_resource type="Script" uid="uid://bh4rdesywvn37" path="res://scripts/card_states/champion.gd" id="10_vpv4f"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s4mse"]
@@ -46,11 +47,14 @@ script = ExtResource("7_ya72j")
 [node name="Table" type="Node" parent="StateMachine"]
 script = ExtResource("8_k2mc5")
 
-[node name="Select" type="Node" parent="StateMachine"]
-script = ExtResource("8_pfjhk")
-
 [node name="Discard" type="Node" parent="StateMachine"]
 script = ExtResource("9_pfjhk")
+
+[node name="Equiped" type="Node" parent="StateMachine"]
+script = ExtResource("9_s58hd")
+
+[node name="Select" type="Node" parent="StateMachine"]
+script = ExtResource("8_pfjhk")
 
 [node name="Champion" type="Node" parent="StateMachine"]
 script = ExtResource("10_vpv4f")

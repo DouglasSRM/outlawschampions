@@ -4,7 +4,8 @@ extends CardState
 
 func enter() -> void:
 	if card.table_position == 0:
-		card.table_position = card.get_table_count()
+		card.table_position = 3
+		#card.table_position = card.get_table_count()
 	
 	var z: float = -0.85 # table
 	var card_distance = 0.6
@@ -15,6 +16,10 @@ func enter() -> void:
 	
 	var table_pos = Vector3(x, 0, z)
 	card.move_state(table_pos, BaseCard.IN_TABLE)
+
+
+func update() -> void:
+	enter()
 
 
 func exit() -> void:

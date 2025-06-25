@@ -47,12 +47,22 @@ func click():
 	state_machine.process_click()
 
 
+func can_hover() -> bool:
+	return !is_locked_for_movement() and parent.manage_hover(self)
+
 func _on_mouse_entered() -> void:
-	state_machine.mouse_enter()
+	if parent.manage_hover(self):
+		state_machine.mouse_enter()
 
 
 func _on_mouse_exited() -> void:
-	state_machine.mouse_leave()
+	if parent.manage_hover(self):
+		state_machine.mouse_leave()
+
+
+func hand_click():
+	if parent.allow_hand_click(self):
+		self.click()
 
 
 func deck_click():
@@ -112,6 +122,7 @@ func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, n
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		match state:
 			IN_DECK: deck_click() # When any card of the deck is clicked, the click event will be executed for the first card of the deck.
+			IN_HAND: hand_click()
 			_: click()
 
 
