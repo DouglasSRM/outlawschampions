@@ -9,6 +9,8 @@ signal loaded
 
 @onready var cards: Node = $Game/Cards
 
+@onready var player_positions: Node = $Game/PositionComponents/PlayerPositions
+
 @onready var camera: Camera3D = $Game/Camera
 
 @onready var lbl_card_description: Label = $GUI/Control/LblDescription
@@ -122,7 +124,6 @@ func create_action_cards():
 	for i in range(1,action_deck_count+1):
 		var card = create_action_card()
 		card.parent = self
-		card.state = BaseCard.IN_DECK
 		card.deck_position = i
 		cards.add_child(card)
 
@@ -134,7 +135,6 @@ func create_support_cards():
 	for i in range(1,support_deck_count+1):
 		var card = create_support_card()
 		card.parent = self
-		card.state = BaseCard.IN_DECK
 		card.deck_position = i
 		cards.add_child(card)
 
@@ -238,6 +238,11 @@ func handle_equip(card: BaseCard):
 func handle_discard(card: BaseCard):
 	discard_count += 1
 	card.discard()
+
+
+func set_player_positions():
+	for card in get_cards(BaseCard.IN_DECK):
+		card.set_position_component(player_positions.duplicate())
 
 
 func get_cards(state: int) -> Array[BaseCard]:

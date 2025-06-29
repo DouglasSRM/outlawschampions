@@ -9,6 +9,7 @@ func get_deck_count() -> int:
 
 
 func _ready() -> void:
+	super()
 	state_machine.init(self,deck)
 	champion = Global.player_champion
 

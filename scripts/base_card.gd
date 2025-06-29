@@ -21,6 +21,8 @@ enum {
 
 @export var description: String = 'Default description'
 
+var position_component: PostionComponent
+
 var state           : int = NONE
 var hand_position   : int = 0
 var table_position  : int = 0
@@ -30,6 +32,16 @@ var discard_position: int = 0
 var hover: bool = false
 var default_position: Vector3 = Vector3(0,0,0)
 var hover_position  : Vector3 = Vector3(0,0,0)
+
+
+func set_position_component(component: PostionComponent):
+	position_component = component
+	position_component.card = self
+
+
+func _ready() -> void:
+	if !position_component:
+		set_position_component($PositionComponent)
 
 
 func handle_table_click() -> bool:

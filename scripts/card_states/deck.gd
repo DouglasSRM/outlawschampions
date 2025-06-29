@@ -1,18 +1,10 @@
 extends CardState
 
 @onready var hand: CardState = $"../Hand"
-@onready var table: Node = $"../Table"
+@onready var table: CardState = $"../Table"
 
 func enter() -> void:
-	var y = (card.deck_position-1) * 0.005
-	
-	if card is ActionCard:
-		card.position = Vector3(-0.5, y, 0.9)
-		card.rotation = Vector3(deg_to_rad(90), deg_to_rad(-90), 0.0)
-	elif card is SupportCard:
-		card.position = Vector3(0.5, y, 0.9)
-		card.rotation = Vector3(deg_to_rad(90), deg_to_rad(90), 0.0)
-
+	card.position_component.deck()
 
 func exit() -> void:
 	if card is ActionCard:
@@ -20,12 +12,6 @@ func exit() -> void:
 	elif card is SupportCard:
 		card.parent.support_deck_count -= 1
 	card.deck_position = 0
-
-func mouse_enter() -> CardState:
-	return super()
-
-func mouse_leave() -> CardState:
-	return super()
 
 func process_click()-> CardState:
 	if card is SupportCard:

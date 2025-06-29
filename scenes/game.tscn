@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://8yke3hj82k58"]
+[gd_scene load_steps=12 format=3 uid="uid://8yke3hj82k58"]
 
 [ext_resource type="Script" uid="uid://cl8126njaxgsh" path="res://scripts/game_base.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://cleh4uy2co631" path="res://scripts/components/player_positions.gd" id="2_gee14"]
 [ext_resource type="Script" uid="uid://37iaihodyu14" path="res://scripts/game_state_machine.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://btr5fqto5cmbj" path="res://scripts/game_states/loading.gd" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://d4dgd2ugielfx" path="res://scripts/game_states/buying_support.gd" id="4_lbhrr"]
@@ -44,6 +45,11 @@ transform = Transform3D(1, 0, 0, 0, 0.0339576, 0.999423, 0, -0.999423, 0.0339576
 transform = Transform3D(1, 0, 0, 0, -0.975596, 0.219574, 0, -0.219574, -0.975596, 0, 3.79288, -16.4713)
 
 [node name="Cards" type="Node" parent="Game"]
+
+[node name="PositionComponents" type="Node" parent="Game"]
+
+[node name="PlayerPositions" type="Node" parent="Game/PositionComponents"]
+script = ExtResource("2_gee14")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 physics_interpolation_mode = 2

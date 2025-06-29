@@ -5,6 +5,7 @@ extends BaseCard
 
 
 func _ready() -> void:
+	super()
 	state_machine.init(self,deck)
 
 

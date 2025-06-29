@@ -12,6 +12,7 @@ func enter() -> void:
 	
 	parent.create_action_cards()
 	parent.create_support_cards()
+	parent.set_player_positions()
 	parent.set_starter_hand()
 	
 	parent.emit_signal('loaded')
