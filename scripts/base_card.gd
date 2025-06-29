@@ -17,6 +17,7 @@ enum {
 @onready var parent: Node3D
 @onready var state_machine: CardStateMachine = $StateMachine
 @onready var discard_state: Node = $StateMachine/Discard
+@onready var hand: Node = $StateMachine/Hand
 
 @export var description: String = 'Default description'
 
@@ -36,7 +37,13 @@ func handle_table_click() -> bool:
 
 
 func handle_hand_click() -> bool:
-	return parent.manage_hand_click(self)
+	if parent.allow_hand_click(self):
+		return parent.manage_hand_click(self)
+	return false
+
+
+func equip():
+	state_machine.equip()
 
 
 func update():
@@ -47,8 +54,15 @@ func click():
 	state_machine.process_click()
 
 
+func go_to_hand():
+	state_machine.change_state(hand)
+
+
 func can_hover() -> bool:
-	return !is_locked_for_movement() and parent.manage_hover(self)
+	if !is_locked_for_movement():
+		return parent.manage_hover(self)
+	return false
+
 
 func _on_mouse_entered() -> void:
 	if parent.manage_hover(self):
@@ -60,16 +74,9 @@ func _on_mouse_exited() -> void:
 		state_machine.mouse_leave()
 
 
-func hand_click():
-	if parent.allow_hand_click(self):
-		self.click()
-
-
 func deck_click():
 	var card: BaseCard = parent.manage_deck_click(self)
-	if card:
-		parent.update_hand_count(1)
-		card.click()
+	if card: card.click()
 
 
 func discard():
@@ -77,13 +84,12 @@ func discard():
 
 
 func play() -> bool:
-	await get_tree().create_timer(0.7).timeout
 	return true
 
 
 func get_table_count() -> int:
 	return parent.table_count;
-	
+
 
 func get_hand_count() -> int:
 	return parent.hand_count;
@@ -93,36 +99,25 @@ func get_discard_count() -> int:
 	return parent.discard_count;
 
 
-func update_hover_position(pos: Vector3 = position):
-	var pos_x = (pos[0] / 4) * 3.07
-	var pos_y = 0.7  
-	var pos_z = pos[2] - (pos[2] / 4.23)
+func update_hover_position(hover_height: float = 0.7):
+	const X_FACTOR = 0.33
+	const Z_FACTOR = 0.34
 	
-	hover_position = Vector3(pos_x, pos_y, pos_z)
-
-
-func move_state(target_position: Vector3, new_state):
-	lock()
-	
-	var duration = 0.5
-	var tween = create_tween()
-	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	
-	await tween.finished
-	state = new_state
-	
-	unlock()
+	hover_position = Vector3(
+		default_position.x * (1.0 - X_FACTOR * hover_height),
+		hover_height,
+		default_position.z * (1.0 - Z_FACTOR * hover_height)
+	)
 
 
 func select():
-	pass
+	parent.select_card(self)
 
 
 func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		match state:
 			IN_DECK: deck_click() # When any card of the deck is clicked, the click event will be executed for the first card of the deck.
-			IN_HAND: hand_click()
 			_: click()
 
 
@@ -154,9 +149,19 @@ func do_exit_hover_animation() -> void:
 
 func set_default_position(pos: Vector3 = position):
 	self.default_position = pos
-	update_hover_position(pos)
+	update_hover_position()
 
 
 func move_to_position(target_position: Vector3, duration: float):
 	var tween = create_tween()
 	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func move_state(new_state, target_position: Vector3 = default_position):
+	lock()
+	var duration = 0.5
+	var tween = create_tween()
+	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	state = new_state
+	unlock()

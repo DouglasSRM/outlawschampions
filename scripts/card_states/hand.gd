@@ -12,10 +12,9 @@ func enter() -> void:
 	var initial_position: float = ((card_distance * (card.get_hand_count() - 1)) / 2)
 	var x: float = initial_position - (card_distance * (card.hand_position - 1))
 	
-	card.default_position = Vector3(x, 0, z)
-	card.update_hover_position(card.default_position)
+	card.set_default_position(Vector3(x, 0, z))
+	card.move_state(BaseCard.IN_HAND)
 	
-	card.move_state(card.default_position, BaseCard.IN_HAND)
 	card.rotation = Vector3(deg_to_rad(-90), deg_to_rad(180), 0.0)
 
 

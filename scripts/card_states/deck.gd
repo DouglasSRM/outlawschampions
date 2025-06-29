@@ -1,6 +1,7 @@
 extends CardState
 
 @onready var hand: CardState = $"../Hand"
+@onready var table: Node = $"../Table"
 
 func enter() -> void:
 	var y = (card.deck_position-1) * 0.005
@@ -14,6 +15,10 @@ func enter() -> void:
 
 
 func exit() -> void:
+	if card is ActionCard:
+		card.parent.action_deck_count -= 1
+	elif card is SupportCard:
+		card.parent.support_deck_count -= 1
 	card.deck_position = 0
 
 func mouse_enter() -> CardState:
@@ -23,4 +28,9 @@ func mouse_leave() -> CardState:
 	return super()
 
 func process_click()-> CardState:
-	return hand
+	if card is SupportCard:
+		card.parent.update_hand_count(1)
+		return hand
+	if card is ActionCard:
+		return table
+	return null

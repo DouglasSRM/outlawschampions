@@ -1,6 +1,7 @@
 extends CardState
 
 @onready var hand: CardState = $"../Hand"
+@onready var equiped: Node = $"../Equiped"
 
 func enter() -> void:
 	if card.table_position == 0:
@@ -14,8 +15,14 @@ func enter() -> void:
 	
 	var x: float = initial_position - (card_distance * (card.table_position - 1))
 	
-	var table_pos = Vector3(x, 0, z)
-	card.move_state(table_pos, BaseCard.IN_TABLE)
+	card.set_default_position(Vector3(x, 0, z))
+	card.move_state(BaseCard.IN_TABLE)
+	card.rotation = Vector3(deg_to_rad(-90), deg_to_rad(180), 0.0)
+	card.select()
+
+
+func equip() -> CardState:
+	return equiped
 
 
 func update() -> void:
@@ -29,4 +36,16 @@ func exit() -> void:
 func process_click()-> CardState:
 	if card.handle_table_click():
 		return hand
+	return null
+
+
+func mouse_enter() -> CardState:
+	if card.can_hover():
+		card.do_hover_animation()
+	return null
+
+
+func mouse_leave() -> CardState:
+	if card.can_hover() and card.hover:
+		card.do_exit_hover_animation()
 	return null

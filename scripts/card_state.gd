@@ -12,6 +12,9 @@ func exit() -> void:
 func update() -> void:
 	pass
 
+func equip() -> CardState:
+	return null
+
 func mouse_enter() -> CardState:
 	return null
 

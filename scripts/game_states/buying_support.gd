@@ -16,15 +16,11 @@ func enter() -> void:
 
 
 func handle_hover(card: BaseCard) -> bool:
-	#if card is ChampionCard:
-		#return true
 	return false
 
 
 func process_support_deck_click() -> GameState:
 	parent.can_buy_support -= 1
-	print('a')
 	if (parent.can_buy_support > 0):
-		print('b')
 		return self
 	return equip    

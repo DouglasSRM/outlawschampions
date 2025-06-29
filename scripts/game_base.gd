@@ -69,7 +69,7 @@ func set_starter_hand():
 			card = get_card_from_support_deck()
 		
 		card.hand_position = i
-		card.click()
+		card.go_to_hand()
 		i += 1
 
 
@@ -104,7 +104,6 @@ func process_support_deck_click() -> SupportCard:
 func get_card_from_action_deck() -> ActionCard:
 	for card in get_cards(BaseCard.IN_DECK):
 		if card is ActionCard and (card.deck_position == action_deck_count):
-			action_deck_count -= 1
 			return card
 	return null
 
@@ -112,7 +111,6 @@ func get_card_from_action_deck() -> ActionCard:
 func get_card_from_support_deck() -> SupportCard:
 	for card in get_cards(BaseCard.IN_DECK):
 		if (card is SupportCard) and (card.deck_position == support_deck_count):
-			support_deck_count -= 1
 			return card
 	return null
 
@@ -158,17 +156,18 @@ func manage_hand_click(card: BaseCard) -> bool:
 		return false
 	
 	if selected_card:
-		return false
-	
-	selected_card = card
-	#update_table_count(1)
-	update_hand_count(-1,card)
-	
-	lbl_card_description.text = card.description
-	#if card is ActionCard:
-	btn_play_card.visible = true
+		update_hand_count(0, card)
+		selected_card.go_to_hand()
+	else:
+		update_hand_count(-1,card)
 	
 	return true
+
+
+func select_card(card: BaseCard):
+	selected_card = card
+	lbl_card_description.text = card.description
+	btn_play_card.visible = true
 
 
 func manage_table_click(card: BaseCard) -> bool:
@@ -177,11 +176,8 @@ func manage_table_click(card: BaseCard) -> bool:
 	
 	selected_card = null
 	update_hand_count(1)
-	#update_table_count(-1)
-	card.click()
 	
 	lbl_card_description.text = ''
-	#if card is ActionCard:
 	btn_play_card.visible = false
 		
 	return true
@@ -236,14 +232,10 @@ func pop_card(card: BaseCard):
 
 
 func handle_equip(card: BaseCard):
-	card.table_position = 1
-	card.update()
+	card.equip()
 
 
 func handle_discard(card: BaseCard):
-	#if card.state == BaseCard.IN_TABLE:
-		#table_count -= 1
-	
 	discard_count += 1
 	card.discard()
 

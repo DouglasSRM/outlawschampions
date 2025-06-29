@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 func play() -> bool:
-	await super()
+	await get_tree().create_timer(0.7).timeout
 	parent.handle_discard(self)
 	return true
 

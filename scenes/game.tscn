@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://8yke3hj82k58"]
+[gd_scene load_steps=11 format=3 uid="uid://8yke3hj82k58"]
 
 [ext_resource type="Script" uid="uid://cl8126njaxgsh" path="res://scripts/game_base.gd" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://37iaihodyu14" path="res://scripts/game_state_machine.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://btr5fqto5cmbj" path="res://scripts/game_states/loading.gd" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://d4dgd2ugielfx" path="res://scripts/game_states/buying_support.gd" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://bbofictnr7eqc" path="res://scripts/game_states/equip.gd" id="5_iywne"]
+[ext_resource type="Script" uid="uid://cf3qe0drjkd0i" path="res://scripts/game_states/attack.gd" id="6_p57ef"]
+[ext_resource type="Script" uid="uid://b8g67sl0f8iuk" path="res://scenes/buying_action.gd" id="6_u5sy4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qnwvq"]
 size = Vector3(8.25, 0.5, 4.65)
@@ -152,6 +154,12 @@ script = ExtResource("4_lbhrr")
 
 [node name="Equip" type="Node" parent="StateMachine"]
 script = ExtResource("5_iywne")
+
+[node name="BuyingAction" type="Node" parent="StateMachine"]
+script = ExtResource("6_u5sy4")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("6_p57ef")
 
 [connection signal="loaded" from="." to="." method="_on_loaded"]
 [connection signal="button_down" from="GUI/Control/BtnPlayCard" to="." method="_on_btn_play_card_button_down"]

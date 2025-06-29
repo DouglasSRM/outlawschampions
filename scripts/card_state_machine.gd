@@ -24,6 +24,12 @@ func change_state(new_state: CardState) -> void:
 	current_state.enter()
 
 
+func equip():
+	var new_state = current_state.equip()
+	if new_state:
+		change_state(new_state)
+
+
 func update() -> void:
 	current_state.update()
 
