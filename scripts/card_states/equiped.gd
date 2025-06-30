@@ -2,6 +2,12 @@ extends CardState
 
 func enter() -> void:
 	card.position_component.equip()
+	
+	var round = card.parent.round
+	while card.parent.round != round+4:
+		await get_tree().create_timer(0.5).timeout
+	
+	card.parent.handle_discard(card)
 
 func exit() -> void:
 	card.table_position = 0

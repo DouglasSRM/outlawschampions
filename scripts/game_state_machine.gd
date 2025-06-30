@@ -35,7 +35,7 @@ func handle_play_button():
 
 
 func process_action_deck_click() -> bool:
-	var new_state = current_state.process_action_deck_click()
+	var new_state = await current_state.process_action_deck_click()
 	if new_state:
 		change_state(new_state)
 		return true
@@ -50,7 +50,7 @@ func process_support_deck_click() -> bool:
 	return false
 
 
-func start_game() -> void:
-	var new_state = current_state.start_game()
+func start_round() -> void:
+	var new_state = current_state.start_round()
 	if new_state:
 		change_state(new_state)

@@ -11,6 +11,7 @@ enum {
 	IN_DECK,
 	IN_HAND,
 	IN_TABLE,
+	EQUIPED,
 	IN_DISCARD
 }
 
@@ -21,6 +22,7 @@ enum {
 
 @export var description: String = 'Default description'
 
+var actor: Actor
 var position_component: PostionComponent
 
 var state           : int = NONE
@@ -34,9 +36,22 @@ var default_position: Vector3 = Vector3(0,0,0)
 var hover_position  : Vector3 = Vector3(0,0,0)
 
 
+func current_actor() -> Actor:
+	return parent.current_actor
+
+
+func set_actor(actor: Actor = null):
+	if actor:
+		self.actor = actor
+	else:
+		self.actor = current_actor()
+	
+	set_position_component(self.actor.position_component)
+
+
 func set_position_component(component: PostionComponent):
-	position_component = component
-	position_component.card = self
+	self.position_component = component.duplicate()
+	self.position_component.card = self
 
 
 func _ready() -> void:
@@ -87,7 +102,7 @@ func _on_mouse_exited() -> void:
 
 
 func deck_click():
-	var card: BaseCard = parent.manage_deck_click(self)
+	var card: BaseCard = await parent.manage_deck_click(self)
 	if card: card.click()
 
 
@@ -100,11 +115,11 @@ func play() -> bool:
 
 
 func get_table_count() -> int:
-	return parent.table_count;
+	return actor.table_count;
 
 
 func get_hand_count() -> int:
-	return parent.hand_count;
+	return actor.hand_count;
 
 
 func get_discard_count() -> int:
@@ -117,7 +132,7 @@ func update_hover_position(hover_height: float = 0.7):
 	
 	hover_position = Vector3(
 		default_position.x * (1.0 - X_FACTOR * hover_height),
-		hover_height,
+		default_position.y + hover_height,
 		default_position.z * (1.0 - Z_FACTOR * hover_height)
 	)
 
@@ -167,6 +182,7 @@ func set_default_position(pos: Vector3 = position):
 func move_to_position(target_position: Vector3, duration: float):
 	var tween = create_tween()
 	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
 
 
 func move_state(new_state, target_position: Vector3 = default_position):

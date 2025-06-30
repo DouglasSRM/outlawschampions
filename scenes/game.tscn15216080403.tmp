@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://h74b5xweuk2v" path="res://scripts/actors/opponent_up.gd" id="5_kvpfn"]
 [ext_resource type="Script" uid="uid://tbsfkyislio0" path="res://scripts/actors/opponent_right.gd" id="6_dinhu"]
 [ext_resource type="Script" uid="uid://cf3qe0drjkd0i" path="res://scripts/game_states/attack.gd" id="6_p57ef"]
-[ext_resource type="Script" uid="uid://e1fdilfulthq" path="res://scripts/game_states/locked.gd" id="16_ca42v"]
+[ext_resource type="Script" uid="uid://b8g67sl0f8iuk" path="res://scenes/buying_action.gd" id="6_u5sy4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qnwvq"]
 size = Vector3(8.25, 0.5, 4.65)
@@ -28,6 +28,8 @@ size = Vector3(8.15, 0.5, 4.65)
 
 [node name="GameScene" type="Node3D"]
 script = ExtResource("1_uwrxv")
+action_deck_count = null
+support_deck_count = null
 
 [node name="Game" type="Node3D" parent="."]
 
@@ -191,11 +193,11 @@ script = ExtResource("4_lbhrr")
 [node name="Equip" type="Node" parent="StateMachine"]
 script = ExtResource("5_iywne")
 
+[node name="BuyingAction" type="Node" parent="StateMachine"]
+script = ExtResource("6_u5sy4")
+
 [node name="Attack" type="Node" parent="StateMachine"]
 script = ExtResource("6_p57ef")
-
-[node name="Locked" type="Node" parent="StateMachine"]
-script = ExtResource("16_ca42v")
 
 [connection signal="loaded" from="." to="." method="_on_loaded"]
 [connection signal="button_down" from="GUI/Control/BtnPlayCard" to="." method="_on_btn_play_card_button_down"]

@@ -18,7 +18,7 @@ func handle_hover(card: BaseCard) -> bool:
 func handle_play_button() -> GameState:
 	return null
 
-func start_game() -> GameState:
+func start_round() -> GameState:
 	return null
 
 func process_action_deck_click() -> GameState:

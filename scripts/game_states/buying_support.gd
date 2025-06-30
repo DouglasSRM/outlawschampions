@@ -12,7 +12,11 @@ func enter() -> void:
 		await get_tree().create_timer(0.1).timeout
 	
 	card.set_default_position()
-	parent.pop_card(card)
+	
+	if parent.is_player_turn():
+		parent.pop_card(card)
+	else:
+		parent.start_enemy_loop()
 
 
 func handle_hover(card: BaseCard) -> bool:

@@ -11,6 +11,8 @@ signal loaded
 
 @onready var player_positions: Node = $Game/PositionComponents/PlayerPositions
 
+@onready var actors: Node = $Game/Actors
+
 @onready var camera: Camera3D = $Game/Camera
 
 @onready var lbl_card_description: Label = $GUI/Control/LblDescription
@@ -28,12 +30,14 @@ signal loaded
 @onready var opponentU: ChampionCard = null
 @onready var opponentR: ChampionCard = null
 
+var current_actor: Actor
+var round: int = -1
+
 const champion_position = Vector3(0,0,0.1)
 const opponentL_position = Vector3(1.8,0,0.9)
 const opponentU_position = Vector3(0,0,1.7)
 const opponentR_position = Vector3(-1.8,0,0.9)
 
-@export var hand_count: int = 0
 @export var action_deck_count: int = 0
 @export var support_deck_count: int = 0
 var table_count: int = 5
@@ -52,24 +56,66 @@ func _ready() -> void:
 	state_machine.init(self)
 
 
+func start_enemy_loop():
+	await get_tree().create_timer(0.5).timeout
+	process_support_deck_click().click()
+	await get_tree().create_timer(1).timeout
+	get_random_sup_card_in_hand().click()
+	await get_tree().create_timer(0.5).timeout
+	state_machine.handle_play_button()
+	await get_tree().create_timer(1).timeout
+	var card = await process_action_deck_click()
+	await get_tree().create_timer(1).timeout
+	card.click()
+
+
+func get_random_sup_card_in_hand() -> SupportCard:
+	var sup_cards: Array = get_cards(BaseCard.IN_HAND, false)
+	sup_cards.shuffle()
+	for card in sup_cards:
+		if card is SupportCard:
+			return card
+	return null
+
+
 func _on_loaded() -> void:
-	state_machine.start_game()
+	next_round()
 
 
-func set_starter_hand():
-	if hand_count == 0:
-		hand_count = 6
+func is_player_turn() -> bool:
+	return current_actor.champion == Global.player_champion
+
+
+func define_current_actor(i: int = 0):
+	self.current_actor = actors.get_child(i)
+
+
+func next_round():
+	self.round += 1
+	define_current_actor(round % 4)
+	state_machine.start_round()
+
+
+func set_starter_hands():
+	for actor in actors.get_children():
+		set_starter_hand(actor)
+
+
+func set_starter_hand(actor: Actor):
+	if actor.hand_count == 0:
+		actor.hand_count = 6
 	
 	var i = 1
 	
-	while i <= self.hand_count:
-		var card
+	while i <= actor.hand_count:
+		var card: BaseCard
 		
 		if i % 2 == 0:
 			card = get_card_from_action_deck()
 		else:
 			card = get_card_from_support_deck()
 		
+		card.set_actor(actor)
 		card.hand_position = i
 		card.go_to_hand()
 		i += 1
@@ -81,10 +127,13 @@ func allow_hand_click(card: BaseCard) -> bool:
 
 func manage_deck_click(sender: BaseCard) -> BaseCard:
 	if self.move_locked:
-		return
+		return null
+	
+	if !is_player_turn():
+		return null
 	
 	if sender is ActionCard:
-		return process_action_deck_click()
+		return await process_action_deck_click()
 	elif sender is SupportCard:
 		return process_support_deck_click()
 	else:
@@ -92,9 +141,9 @@ func manage_deck_click(sender: BaseCard) -> BaseCard:
 
 
 func process_action_deck_click() -> ActionCard:
-	if state_machine.process_action_deck_click():
+	if await state_machine.process_action_deck_click():
 		return get_card_from_action_deck()
-	return null
+	return null 
 
 
 func process_support_deck_click() -> SupportCard:
@@ -119,7 +168,7 @@ func get_card_from_support_deck() -> SupportCard:
 
 func create_action_cards():
 	if action_deck_count == 0:
-		action_deck_count = 25 #default
+		action_deck_count = 40 #default
 	
 	for i in range(1,action_deck_count+1):
 		var card = create_action_card()
@@ -130,7 +179,7 @@ func create_action_cards():
 
 func create_support_cards():
 	if support_deck_count == 0:
-		support_deck_count = 25 #default
+		support_deck_count = 40 #default
 	
 	for i in range(1,support_deck_count+1):
 		var card = create_support_card()
@@ -166,12 +215,13 @@ func manage_hand_click(card: BaseCard) -> bool:
 
 func select_card(card: BaseCard):
 	selected_card = card
-	lbl_card_description.text = card.description
-	btn_play_card.visible = true
+	if is_player_turn():
+		lbl_card_description.text = card.description
+		btn_play_card.visible = true
 
 
 func manage_table_click(card: BaseCard) -> bool:
-	if (self.move_locked) or (table_count < 1):
+	if (self.move_locked) or (current_actor.table_count < 1):
 		return false
 	
 	selected_card = null
@@ -184,16 +234,16 @@ func manage_table_click(card: BaseCard) -> bool:
 
 
 func update_table_count(count: int):
-	table_count += count
+	current_actor.table_count += count
 	
-	for card in get_cards(BaseCard.IN_TABLE):
+	for card in get_cards(BaseCard.IN_TABLE, false):
 		card.update()
 
 
 func update_hand_count(count: int, removed_card: BaseCard = null):
-	hand_count += count
+	current_actor.hand_count += count
 	
-	for card in get_cards(BaseCard.IN_HAND):
+	for card in get_cards(BaseCard.IN_HAND, false):
 		if (removed_card == card):
 			continue
 		
@@ -225,10 +275,12 @@ func manage_hover(card: BaseCard) -> bool:
 
 
 func pop_card(card: BaseCard):
+	card.update_hover_position(0.3)
 	card.do_hover_animation()
 	await get_tree().create_timer(0.35).timeout
 	card.do_exit_hover_animation()
 	await get_tree().create_timer(0.35).timeout
+	card.update_hover_position()
 
 
 func handle_equip(card: BaseCard):
@@ -242,14 +294,14 @@ func handle_discard(card: BaseCard):
 
 func set_player_positions():
 	for card in get_cards(BaseCard.IN_DECK):
-		card.set_position_component(player_positions.duplicate())
+		card.set_position_component(player_positions)
 
 
-func get_cards(state: int) -> Array[BaseCard]:
+func get_cards(state: int, all: bool = true) -> Array[BaseCard]:
 	var result: Array[BaseCard] = []
 	
 	for card in cards.get_children():
-		if card.state == state:
+		if (card.state == state and (all or card.actor == self.current_actor)):
 			result.append(card)
 	
 	return result
@@ -294,6 +346,7 @@ func unlock():
 func set_camera_position(pos):
 	match pos:
 		camera_pos.START:
+			#camera.position = Vector3(0, 4.2, 0.8)
 			camera.position = Vector3(0, 3, 0)
 			camera.rotation = Vector3(deg_to_rad(-90), deg_to_rad(-180), 0.0)
 

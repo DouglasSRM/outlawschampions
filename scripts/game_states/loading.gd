@@ -12,10 +12,9 @@ func enter() -> void:
 	
 	parent.create_action_cards()
 	parent.create_support_cards()
-	parent.set_player_positions()
-	parent.set_starter_hand()
-	
+	parent.set_starter_hands()
+	parent.define_current_actor()
 	parent.emit_signal('loaded')
 
-func start_game() -> GameState:
+func start_round() -> GameState:
 	return buying_support

@@ -11,15 +11,15 @@ func _ready() -> void:
 
 
 func play() -> bool:
-	var enemy: ChampionCard
-	match randi_range(1,3):
-		1: enemy = Global.enemy_1
-		2: enemy = Global.enemy_2
-		_: enemy = Global.enemy_3
+	lock()
+	await playing_animation()
+	
+	var enemy: ChampionCard = get_random_enemy()
 	
 	enemy.decrease_health(damage)
 	parent.pop_card(enemy)
 	
+	unlock()
 	return await super()
 
 
