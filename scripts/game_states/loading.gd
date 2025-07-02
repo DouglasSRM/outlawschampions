@@ -13,7 +13,6 @@ func enter() -> void:
 	parent.create_action_cards()
 	parent.create_support_cards()
 	parent.set_starter_hands()
-	parent.define_current_actor()
 	parent.emit_signal('loaded')
 
 func start_round() -> GameState:

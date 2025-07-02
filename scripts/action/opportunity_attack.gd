@@ -6,14 +6,17 @@ var damage: int
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super()
-	damage = champion.power * 2
-	description = 'Deals DOUBLE the base damage of your champion ('+str(damage)+') to a random enemy'
+	if actor:
+		damage = actor.champion.power * 2
+	else:
+		damage = 0
+	
 
 
 func play() -> bool:
 	lock()
 	await playing_animation()
-	
+	damage = actor.champion.power * 2
 	var enemy: ChampionCard = get_random_enemy()
 	
 	enemy.decrease_health(damage)
@@ -25,4 +28,5 @@ func play() -> bool:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if actor:
+		description = 'Deals DOUBLE the base damage of your champion ('+str(actor.champion.power * 2)+') to a random enemy'

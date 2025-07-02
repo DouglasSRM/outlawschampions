@@ -5,13 +5,16 @@ var damage: int
 
 func _ready() -> void:
 	super()
-	damage = champion.power
-	description = 'Deals the base damage of your champion ('+str(damage)+') to a random enemy'
+	if actor:
+		damage = actor.champion.power
+	else:
+		damage = 0
 
 
 func play() -> bool:
 	lock()
 	await playing_animation()
+	damage = actor.champion.power
 	
 	var enemy: ChampionCard = get_random_enemy()
 	
@@ -23,4 +26,5 @@ func play() -> bool:
 
 
 func _process(delta: float) -> void:
-	pass
+	if actor:
+		description = 'Deals the base damage of your champion ('+str(actor.champion.power)+') to a random enemy'

@@ -1,7 +1,6 @@
 class_name ActionCard
 extends BaseCard
 
-@onready var champion: ChampionCard = null
 @onready var deck: CardState = $StateMachine/Deck
 
 func get_deck_count() -> int:
@@ -11,12 +10,10 @@ func get_deck_count() -> int:
 func _ready() -> void:
 	super()
 	state_machine.init(self,deck)
-	champion = Global.player_champion
 
 
 func get_random_enemy() -> ChampionCard:
-	var all_champions = [Global.player_champion, Global.enemy_1, Global.enemy_2, Global.enemy_3]
-	var possible_enemies = all_champions.filter(func(c): return c != actor.champion)
+	var possible_enemies = Global.all_champions.filter(func(c): return c != actor.champion and c.health_status != ChampionCard.hStatus.DEAD)
 	
 	return possible_enemies[randi_range(0, possible_enemies.size() - 1)]
 

@@ -4,7 +4,8 @@ extends BaseCard
 enum hStatus {
 	FULL,
 	HALF,
-	DYING
+	DYING,
+	DEAD
 }
 
 @onready var select_state: Node = $StateMachine/Select
@@ -28,7 +29,7 @@ func attack(champion: ChampionCard, damage := power):
 
 func update_status():
 	match health:
-		0: health_status = hStatus.DYING
+		0: health_status = hStatus.DEAD
 
 
 func set_champion_state():

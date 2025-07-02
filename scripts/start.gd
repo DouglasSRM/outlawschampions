@@ -27,7 +27,9 @@ func change_scene() -> void:
 				2: Global.enemy_3 = card
 			enemy_index += 1
 			cards.remove_child(card)
-			
+	
+	Global.all_champions = [Global.player_champion, Global.enemy_1, Global.enemy_2, Global.enemy_3]
+	
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 func lock():

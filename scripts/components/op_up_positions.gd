@@ -4,9 +4,9 @@ func hand():
 	if card.hand_position == 0:
 		card.hand_position = card.get_hand_count()
 	
-	#card.set_default_position(Vector3(1, 0, 2.4))
+	card.move_state(BaseCard.IN_HAND,Vector3(0, -0.01, 1.7))
 	card.set_default_position(Vector3(0, -0.1, 1.7))
-	card.move_state(BaseCard.IN_HAND)
+	card.move_to_position()
 
 
 func table():

@@ -179,7 +179,7 @@ func set_default_position(pos: Vector3 = position):
 	update_hover_position()
 
 
-func move_to_position(target_position: Vector3, duration: float):
+func move_to_position(target_position: Vector3 = default_position, duration: float = 0.1):
 	var tween = create_tween()
 	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tween.finished

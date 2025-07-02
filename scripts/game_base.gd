@@ -91,9 +91,23 @@ func define_current_actor(i: int = 0):
 
 
 func next_round():
+	var old_actor = self.current_actor
+	
 	self.round += 1
 	define_current_actor(round % 4)
-	state_machine.start_round()
+	
+	while self.current_actor.champion.health_status == ChampionCard.hStatus.DEAD:
+		self.round += 1
+		define_current_actor(round % 4)
+	
+	if old_actor != self.current_actor:
+		state_machine.start_round()
+	else:
+		end()
+
+
+func end():
+	get_tree().change_scene_to_file("res://scenes/start.tscn")
 
 
 func set_starter_hands():
@@ -168,7 +182,7 @@ func get_card_from_support_deck() -> SupportCard:
 
 func create_action_cards():
 	if action_deck_count == 0:
-		action_deck_count = 40 #default
+		action_deck_count = 70 #default
 	
 	for i in range(1,action_deck_count+1):
 		var card = create_action_card()
@@ -179,7 +193,7 @@ func create_action_cards():
 
 func create_support_cards():
 	if support_deck_count == 0:
-		support_deck_count = 40 #default
+		support_deck_count = 70 #default
 	
 	for i in range(1,support_deck_count+1):
 		var card = create_support_card()
@@ -346,7 +360,6 @@ func unlock():
 func set_camera_position(pos):
 	match pos:
 		camera_pos.START:
-			#camera.position = Vector3(0, 4.2, 0.8)
 			camera.position = Vector3(0, 3, 0)
 			camera.rotation = Vector3(deg_to_rad(-90), deg_to_rad(-180), 0.0)
 

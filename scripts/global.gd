@@ -5,6 +5,8 @@ var enemy_1: ChampionCard = null
 var enemy_2: ChampionCard = null
 var enemy_3: ChampionCard = null
 
+var all_champions: Array[ChampionCard]
+
 const basic_attack_scene       = preload("res://scenes/action/basic_attack.tscn")
 const opportunity_attack_scene = preload("res://scenes/action/opportunity_attack.tscn")
 const parry_scene              = preload("res://scenes/support/parry.tscn")
