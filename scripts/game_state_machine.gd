@@ -35,7 +35,7 @@ func handle_play_button():
 
 
 func process_action_deck_click() -> bool:
-	var new_state = await current_state.process_action_deck_click()
+	var new_state = current_state.process_action_deck_click()
 	if new_state:
 		change_state(new_state)
 		return true

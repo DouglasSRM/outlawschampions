@@ -58,15 +58,15 @@ func _ready() -> void:
 
 func start_enemy_loop():
 	await get_tree().create_timer(0.5).timeout
-	process_support_deck_click().click()
+	process_support_deck_click().execute_click()
 	await get_tree().create_timer(1).timeout
-	get_random_sup_card_in_hand().click()
+	get_random_sup_card_in_hand().execute_click()
 	await get_tree().create_timer(0.5).timeout
 	state_machine.handle_play_button()
 	await get_tree().create_timer(1).timeout
 	var card = await process_action_deck_click()
 	await get_tree().create_timer(1).timeout
-	card.click()
+	card.execute_click()
 
 
 func get_random_sup_card_in_hand() -> SupportCard:
@@ -94,11 +94,11 @@ func next_round():
 	var old_actor = self.current_actor
 	
 	self.round += 1
-	define_current_actor(round % 4)
+	define_current_actor(round % actors.get_children().size())
 	
 	while self.current_actor.champion.health_status == ChampionCard.hStatus.DEAD:
 		self.round += 1
-		define_current_actor(round % 4)
+		define_current_actor(round % actors.get_children().size())
 	
 	if old_actor != self.current_actor:
 		state_machine.start_round()
@@ -292,9 +292,10 @@ func pop_card(card: BaseCard):
 	card.update_hover_position(0.3)
 	card.do_hover_animation()
 	await get_tree().create_timer(0.35).timeout
-	card.do_exit_hover_animation()
-	await get_tree().create_timer(0.35).timeout
-	card.update_hover_position()
+	if card.position == card.hover_position:
+		card.do_exit_hover_animation()
+		await get_tree().create_timer(0.2).timeout
+		card.update_hover_position()
 
 
 func handle_equip(card: BaseCard):

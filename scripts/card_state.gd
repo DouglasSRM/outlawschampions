@@ -21,5 +21,8 @@ func mouse_enter() -> CardState:
 func mouse_leave() -> CardState:
 	return null
 
-func process_click()-> CardState:
+func process_click() -> CardState:
+	return null
+
+func handle_click() -> CardState:
 	return null

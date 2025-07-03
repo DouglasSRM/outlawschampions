@@ -14,7 +14,10 @@ func exit() -> void:
 		card.parent.support_deck_count -= 1
 	card.deck_position = 0
 
-func process_click()-> CardState:
+func handle_click() -> CardState:
+	return process_click()
+
+func process_click() -> CardState:
 	card.set_actor()
 	
 	if card is SupportCard:

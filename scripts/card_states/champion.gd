@@ -14,6 +14,3 @@ func mouse_leave() -> CardState:
 	if card.can_hover() and card.hover:
 		card.do_exit_hover_animation()
 	return null
-
-func process_click()-> CardState:
-	return super();

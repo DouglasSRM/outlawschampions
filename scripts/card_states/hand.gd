@@ -21,6 +21,11 @@ func mouse_leave() -> CardState:
 		card.do_exit_hover_animation()
 	return null
 
+func handle_click() -> CardState:
+	if card.actor.champion == Global.player_champion:
+		return process_click()
+	return null
+
 func process_click()-> CardState:
 	if card.handle_hand_click():
 		return table

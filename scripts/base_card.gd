@@ -77,7 +77,7 @@ func update():
 	state_machine.update()
 
 
-func click():
+func execute_click():
 	state_machine.process_click()
 
 
@@ -103,7 +103,7 @@ func _on_mouse_exited() -> void:
 
 func deck_click():
 	var card: BaseCard = await parent.manage_deck_click(self)
-	if card: card.click()
+	if card: card.state_machine.handle_click()
 
 
 func discard():
@@ -145,7 +145,7 @@ func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, n
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		match state:
 			IN_DECK: deck_click() # When any card of the deck is clicked, the click event will be executed for the first card of the deck.
-			_: click()
+			_: state_machine.handle_click()
 
 
 func is_locked_for_movement() -> bool:

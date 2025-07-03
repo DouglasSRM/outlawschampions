@@ -46,6 +46,12 @@ func mouse_leave() -> void:
 		change_state(new_state)
 
 
+func handle_click() -> void:
+	var new_state = current_state.handle_click()
+	if new_state:
+		change_state(new_state)
+
+
 func process_click() -> void:
 	var new_state = current_state.process_click()
 	if new_state:

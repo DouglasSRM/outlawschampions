@@ -14,6 +14,9 @@ func mouse_leave() -> CardState:
 		card.do_exit_hover_animation()
 	return null
 
+func handle_click() -> CardState:
+	return process_click()
+
 func process_click() -> CardState:
 	card.select()
 	return null;

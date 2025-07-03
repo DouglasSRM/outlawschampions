@@ -4,9 +4,6 @@ extends GameState
 @onready var locked: Node = $"../Locked"
 
 func enter() -> void:
-	#if (parent.can_buy_action == 0):
-		#parent.can_buy_action = 1
-	
 	var card = parent.get_card_from_action_deck()
 	
 	while parent.move_locked:
@@ -24,7 +21,7 @@ func handle_play_button() -> GameState:
 
 func process_action_deck_click() -> GameState:
 	if parent.selected_card:
-		parent.selected_card.click()
+		parent.selected_card.execute_click()
 	return locked
 
 

@@ -1,7 +1,6 @@
 class_name Paladin
 extends ChampionCard
 
-
 func _ready() -> void:
 	super()
 	max_health = 65
@@ -9,7 +8,3 @@ func _ready() -> void:
 	power = 4
 	max_mana = 4
 	mana = 0
-
-
-func _process(delta: float) -> void:
-	pass

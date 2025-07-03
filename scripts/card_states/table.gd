@@ -16,6 +16,11 @@ func update() -> void:
 func exit() -> void:
 	card.table_position = 0
 
+func handle_click() -> CardState:
+	if card.actor.champion == Global.player_champion:
+		return process_click()
+	return null
+
 func process_click()-> CardState:
 	if card.handle_table_click():
 		return hand
