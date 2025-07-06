@@ -17,26 +17,17 @@ signal loaded
 
 @onready var lbl_card_description: Label = $GUI/Control/LblDescription
 @onready var health: Label = $GUI/Control/Health
-@onready var healthL: Label = $GUI/Control/HealthL
-@onready var healthU: Label = $GUI/Control/HealthU
-@onready var healthR: Label = $GUI/Control/HealthR
 
 @onready var btn_play_card: Button = $GUI/Control/BtnPlayCard
 
 @onready var state_machine: GameStateMachine = $StateMachine
 
 @onready var champion: ChampionCard = null
-@onready var opponentL: ChampionCard = null
-@onready var opponentU: ChampionCard = null
-@onready var opponentR: ChampionCard = null
 
 var current_actor: Actor
 var round: int = -1
 
 const champion_position = Vector3(0,0,0.1)
-const opponentL_position = Vector3(1.8,0,0.9)
-const opponentU_position = Vector3(0,0,1.7)
-const opponentR_position = Vector3(-1.8,0,0.9)
 
 @export var action_deck_count: int = 0
 @export var support_deck_count: int = 0
@@ -90,15 +81,20 @@ func define_current_actor(i: int = 0):
 	self.current_actor = actors.get_child(i)
 
 
+func get_actors_count() -> int:
+	return actors.get_children().size()
+
+
 func next_round():
 	var old_actor = self.current_actor
 	
 	self.round += 1
-	define_current_actor(round % actors.get_children().size())
+	var size = get_actors_count()
+	define_current_actor(round % size)
 	
 	while self.current_actor.champion.health_status == ChampionCard.hStatus.DEAD:
 		self.round += 1
-		define_current_actor(round % actors.get_children().size())
+		define_current_actor(round % size)
 	
 	if old_actor != self.current_actor:
 		state_machine.start_round()
@@ -328,26 +324,6 @@ func define_champion_positions():
 	champion.parent = self
 	champion.default_position = champion_position
 	champion.set_champion_state()
-	
-	opponentL = Global.enemy_1
-	opponentU = Global.enemy_2
-	opponentR = Global.enemy_3
-	
-	cards.add_child(opponentL)
-	cards.add_child(opponentU)
-	cards.add_child(opponentR)
-	
-	opponentL.parent = self
-	opponentU.parent = self
-	opponentR.parent = self
-	
-	opponentL.default_position = opponentL_position
-	opponentU.default_position = opponentU_position
-	opponentR.default_position = opponentR_position
-	
-	opponentL.set_champion_state()
-	opponentU.set_champion_state()
-	opponentR.set_champion_state()
 
 
 func lock():
@@ -363,14 +339,3 @@ func set_camera_position(pos):
 		camera_pos.START:
 			camera.position = Vector3(0, 3, 0)
 			camera.rotation = Vector3(deg_to_rad(-90), deg_to_rad(-180), 0.0)
-
-
-func _process(_delta: float) -> void:
-	if champion:
-		health.text = str(champion.health)+"/"+str(champion.max_health) + "\n" + str(champion.mana)+"/"+str(champion.max_mana)
-	if opponentL:
-		healthL.text = str(opponentL.health)+"/"+str(opponentL.max_health) + "\n" + str(opponentL.mana)+"/"+str(opponentL.max_mana)
-	if opponentU:
-		healthU.text = str(opponentU.health)+"/"+str(opponentU.max_health) + "\n" + str(opponentU.mana)+"/"+str(opponentU.max_mana)
-	if opponentR:
-		healthR.text = str(opponentR.health)+"/"+str(opponentR.max_health) + "\n" + str(opponentR.mana)+"/"+str(opponentR.max_mana)

@@ -1,20 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://b0wnfho1jdj1h"]
+[gd_scene load_steps=7 format=3 uid="uid://b0wnfho1jdj1h"]
 
 [ext_resource type="Script" uid="uid://cq845ifgwamcw" path="res://scripts/start.gd" id="1_0auqf"]
 [ext_resource type="PackedScene" uid="uid://c4evahqg8jtly" path="res://scenes/champions/mage.tscn" id="1_kdmts"]
 [ext_resource type="PackedScene" uid="uid://cc4u01c30ok5y" path="res://scenes/champions/paladin.tscn" id="2_0auqf"]
 [ext_resource type="PackedScene" uid="uid://bf8s0geh1flxk" path="res://scenes/champions/druid.tscn" id="3_y16t7"]
 [ext_resource type="PackedScene" uid="uid://d3ih6it1bavcu" path="res://scenes/champions/rogue.tscn" id="4_4ge6i"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_ewcy1"]
-size = Vector3(8.25, 0.5, 4.65)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jaeev"]
-vertex_color_is_srgb = true
-albedo_color = Color(0.25098, 0.247059, 0.541176, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_u80x2"]
-size = Vector3(8.15, 0.5, 4.65)
+[ext_resource type="Texture2D" uid="uid://cnctfj1ywhmjc" path="res://images/background.jpeg" id="6_y16t7"]
 
 [node name="Start" type="Node3D"]
 script = ExtResource("1_0auqf")
@@ -23,17 +14,6 @@ script = ExtResource("1_0auqf")
 
 [node name="Camera" type="Camera3D" parent="3D"]
 transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 3, 0)
-
-[node name="VisibleFloor" type="StaticBody3D" parent="3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.256931, 0)
-metadata/_edit_group_ = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="3D/VisibleFloor"]
-mesh = SubResource("BoxMesh_ewcy1")
-surface_material_override/0 = SubResource("StandardMaterial3D_jaeev")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="3D/VisibleFloor"]
-shape = SubResource("BoxShape3D_u80x2")
 
 [node name="Light1" type="DirectionalLight3D" parent="3D"]
 transform = Transform3D(1, 0, 0, 0, 0.0339576, 0.999423, 0, -0.999423, 0.0339576, 0, 9.44136, 0)
@@ -55,6 +35,10 @@ transform = Transform3D(-1, 8.74228e-08, 0, 3.82137e-15, 4.37114e-08, 1, 8.74228
 [node name="Rogue" parent="3D/Cards" instance=ExtResource("4_4ge6i")]
 transform = Transform3D(-1, 8.74228e-08, 0, 3.82137e-15, 4.37114e-08, 1, 8.74228e-08, 1, -4.37114e-08, -1.05, 0, 0)
 
+[node name="Sprite3D" type="Sprite3D" parent="3D"]
+transform = Transform3D(0.77, 0, 0, 0, -3.36578e-08, -0.77, 0, 0.77, -3.36578e-08, 0, -1.5, 0)
+texture = ExtResource("6_y16t7")
+
 [node name="GUI" type="CanvasLayer" parent="."]
 physics_interpolation_mode = 2
 
@@ -70,13 +54,42 @@ mouse_filter = 2
 [node name="Caption" type="Label" parent="GUI/Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.127
+anchor_top = 0.113
 anchor_right = 1.0
 anchor_bottom = 0.194
-offset_left = 377.0
-offset_top = -0.296005
-offset_right = -347.0
-offset_bottom = 0.287994
+offset_top = -0.224007
+offset_right = 0.455933
+offset_bottom = 2.28799
 theme_override_font_sizes/font_size = 27
-text = "Choose your champion!"
+text = "Title"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Two_Players" type="Button" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.312
+anchor_top = 0.446
+anchor_right = 0.468
+anchor_bottom = 0.577
+offset_left = -0.424011
+offset_top = -0.00799561
+offset_right = -0.136047
+offset_bottom = 0.103973
+text = "2 players"
+
+[node name="Four_players" type="Button" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.541
+anchor_top = 0.448
+anchor_right = 0.697
+anchor_bottom = 0.579
+offset_left = -0.231995
+offset_top = -0.304016
+offset_right = 0.0559692
+offset_bottom = -0.192047
+text = "4 players"
+
+[connection signal="button_down" from="GUI/Control/Two_Players" to="." method="_on_two_players_button_down"]
+[connection signal="button_down" from="GUI/Control/Four_players" to="." method="_on_four_players_button_down"]

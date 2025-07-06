@@ -1,0 +1,31 @@
+[gd_scene load_steps=9 format=3 uid="uid://dhijtqahxujg2"]
+
+[ext_resource type="PackedScene" uid="uid://8yke3hj82k58" path="res://scenes/game.tscn" id="1_ao50j"]
+[ext_resource type="Script" uid="uid://232cexk7l2gw" path="res://scripts/games/4_player_game.gd" id="2_n8yhm"]
+[ext_resource type="Script" uid="uid://bb23vno4x0b7r" path="res://scripts/components/op_up_positions.gd" id="3_rgnpj"]
+[ext_resource type="Script" uid="uid://h74b5xweuk2v" path="res://scripts/actors/opponent_up.gd" id="4_fwr4t"]
+[ext_resource type="Script" uid="uid://tbsfkyislio0" path="res://scripts/actors/opponent_right.gd" id="4_k7bfo"]
+[ext_resource type="Script" uid="uid://bf3mqp3py56xh" path="res://scripts/components/op_right_positions.gd" id="4_nrfe6"]
+[ext_resource type="Script" uid="uid://bw8vi52aiqenr" path="res://scripts/components/op_left_positions.gd" id="5_g10yc"]
+[ext_resource type="Script" uid="uid://qdxbtu6jxx0b" path="res://scripts/actors/opponent_left.gd" id="7_nrfe6"]
+
+[node name="GameScene" instance=ExtResource("1_ao50j")]
+script = ExtResource("2_n8yhm")
+
+[node name="OpUpPositions" type="Node" parent="Game/PositionComponents" index="1"]
+script = ExtResource("3_rgnpj")
+
+[node name="OpRightPositions" type="Node" parent="Game/PositionComponents" index="2"]
+script = ExtResource("4_nrfe6")
+
+[node name="OpLeftPositions" type="Node" parent="Game/PositionComponents" index="3"]
+script = ExtResource("5_g10yc")
+
+[node name="OpponentLeft" type="Node" parent="Game/Actors" index="1"]
+script = ExtResource("7_nrfe6")
+
+[node name="OpponentUp" type="Node" parent="Game/Actors" index="2"]
+script = ExtResource("4_fwr4t")
+
+[node name="OpponentRight" type="Node" parent="Game/Actors" index="3"]
+script = ExtResource("4_k7bfo")

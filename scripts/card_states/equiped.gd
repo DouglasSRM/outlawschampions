@@ -4,7 +4,8 @@ func enter() -> void:
 	card.position_component.equip()
 	
 	var round = card.parent.round
-	while card.parent.round < round+4:
+	#Equiped until its the actors round again
+	while card.parent.round < round + card.get_actors_count():
 		await get_tree().create_timer(0.5).timeout
 	
 	card.parent.handle_discard(card)

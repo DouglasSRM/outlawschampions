@@ -137,6 +137,10 @@ func update_hover_position(hover_height: float = 0.7):
 	)
 
 
+func get_actors_count() -> int:
+	return parent.get_actors_count()
+
+
 func select():
 	parent.select_card(self)
 

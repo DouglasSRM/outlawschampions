@@ -1,7 +1,7 @@
 extends PostionComponent
 
-var hand_move   = Vector3(-1.8, -0.01, 0.9)
-var hand_pos    = Vector3(-1.8, -0.5, 0.9) 
+var hand_move   = Vector3(-1.8, 0, 0.9)
+var hand_pos    = Vector3(-1.8, -5, 0.9) 
 var equiped_pos = Vector3(-1.8, 0, 0)
 
 func hand():
@@ -12,15 +12,18 @@ func hand():
 	await card.move_state(BaseCard.IN_HAND,hand_move)
 	card.set_default_position(hand_pos)
 	card.move_to_position()
+	card.visible = false
 
 
 func table():
+	card.visible = true
 	if card.table_position == 0:
 		card.table_position = 3
 	
 	card.move_state(BaseCard.IN_TABLE)
 
 func equip():
+	card.visible = true
 	card.position = hand_move
 	card.set_default_position(equiped_pos)
 	card.move_state(BaseCard.EQUIPED)
