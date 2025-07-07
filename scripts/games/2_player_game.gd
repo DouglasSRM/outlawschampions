@@ -6,6 +6,10 @@ extends GameScene
 
 const opponentU_position = Vector3(0,0,1.7)
 
+func _on_loaded() -> void:
+	self.round = randi_range(0,1)
+	super()
+
 func define_champion_positions():
 	super()
 	

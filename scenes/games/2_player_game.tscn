@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://8yke3hj82k58" path="res://scenes/game.tscn" id="1_60e4r"]
 [ext_resource type="Script" uid="uid://1fe3wov5xcdx" path="res://scripts/games/2_player_game.gd" id="2_xovyl"]
 [ext_resource type="Script" uid="uid://bb23vno4x0b7r" path="res://scripts/components/op_up_positions.gd" id="3_aaj7l"]
-[ext_resource type="Script" uid="uid://h74b5xweuk2v" path="res://scripts/actors/opponent_up.gd" id="3_v1eia"]
+[ext_resource type="Script" uid="uid://mjniht25puva" path="res://scripts/actors/opponent_up_2.gd" id="4_aaj7l"]
 
 [node name="GameScene" instance=ExtResource("1_60e4r")]
 script = ExtResource("2_xovyl")
@@ -12,4 +12,4 @@ script = ExtResource("2_xovyl")
 script = ExtResource("3_aaj7l")
 
 [node name="OpponentUp" type="Node" parent="Game/Actors" index="1"]
-script = ExtResource("3_v1eia")
+script = ExtResource("4_aaj7l")

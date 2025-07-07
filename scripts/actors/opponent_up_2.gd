@@ -4,4 +4,4 @@ extends Actor
 
 func _ready():
 	self.position_component = op_up_positions
-	self.champion = Global.enemy_2
+	self.champion = Global.enemy_1

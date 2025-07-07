@@ -12,6 +12,10 @@ const opponentL_position = Vector3(1.8,0,0.9)
 const opponentU_position = Vector3(0,0,1.7)
 const opponentR_position = Vector3(-1.8,0,0.9)
 
+func _on_loaded() -> void:
+	self.round = randi_range(0,3)
+	super()
+
 func define_champion_positions():
 	super()
 	
