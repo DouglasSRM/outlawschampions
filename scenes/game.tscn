@@ -139,6 +139,19 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="BtnRestart" type="Button" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.867
+anchor_top = 0.034
+anchor_right = 0.966
+anchor_bottom = 0.082
+offset_left = 0.215942
+offset_top = -0.0320015
+offset_right = 0.167969
+offset_bottom = -0.136002
+text = "Restart Game"
+
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_yqjtg")
 
@@ -159,3 +172,4 @@ script = ExtResource("16_ca42v")
 
 [connection signal="loaded" from="." to="." method="_on_loaded"]
 [connection signal="button_down" from="GUI/Control/BtnPlayCard" to="." method="_on_btn_play_card_button_down"]
+[connection signal="button_up" from="GUI/Control/BtnRestart" to="." method="_on_btn_restart_button_up"]

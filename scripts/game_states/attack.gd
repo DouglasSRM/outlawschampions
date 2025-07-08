@@ -19,6 +19,10 @@ func handle_play_button() -> GameState:
 	return buying_support
 
 
+func can_use_special() -> bool:
+	return parent.is_player_turn()
+
+
 func process_action_deck_click() -> GameState:
 	if parent.selected_card:
 		parent.selected_card.execute_click()
@@ -40,4 +44,8 @@ func handle_hover(card: BaseCard) -> bool:
 	
 	if card is ActionCard:
 		return true
+	
+	if card is ChampionCard and card.can_use_special():
+		return true
+	
 	return false  

@@ -41,7 +41,7 @@ func mouse_enter() -> void:
 
 
 func mouse_leave() -> void:
-	var new_state = current_state.mouse_leave()
+	var new_state = await current_state.mouse_leave()
 	if new_state:
 		change_state(new_state)
 

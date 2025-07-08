@@ -9,6 +9,9 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
+func can_use_special() -> bool:
+	return false
+
 func allow_hand_click(card: BaseCard) -> bool:
 	return false
 

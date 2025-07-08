@@ -26,3 +26,10 @@ func process_click() -> CardState:
 
 func handle_click() -> CardState:
 	return null
+
+func try_exit_hover():
+	var old_pos = card.default_position
+	while !card.can_hover():
+		await get_tree().create_timer(1).timeout
+	if card.default_position == old_pos:
+		card.do_exit_hover_animation()

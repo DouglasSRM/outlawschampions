@@ -3,6 +3,7 @@ extends GameState
 @onready var equip: GameState = $"../Equip"
 
 func enter() -> void:
+	parent.current_actor.start_rount()
 	if (parent.can_buy_support == 0):
 		parent.can_buy_support = 1
 		

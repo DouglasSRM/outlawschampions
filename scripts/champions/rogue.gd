@@ -8,3 +8,4 @@ func _ready() -> void:
 	power = 5
 	max_mana = 4
 	mana = 0
+	special_mana = 4

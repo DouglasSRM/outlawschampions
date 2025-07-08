@@ -11,6 +11,18 @@ func mouse_enter() -> CardState:
 	return null
 
 func mouse_leave() -> CardState:
-	if card.can_hover() and card.hover:
-		card.do_exit_hover_animation()
+	if card.hover:
+		try_exit_hover()
 	return null
+
+func process_click() -> CardState:
+	card.special_attack()
+	return null
+
+func handle_click() -> CardState:
+	if !(card is ChampionCard):
+		return null
+	if card.can_use_special():
+		return process_click()
+	return null
+	

@@ -25,7 +25,7 @@ func playing_animation():
 	await get_tree().create_timer(0.5).timeout
 	
 	var pos = self.actor.champion.position
-	pos = Vector3(pos.x, 0.1, pos.z)
+	pos = Vector3(pos.x, 0.01, pos.z)
 	
 	await self.move_to_position(pos, 0.5)
 

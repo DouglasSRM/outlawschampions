@@ -9,3 +9,7 @@ var table_count: int = 5
 var can_buy_support: int = 0
 ## How many action cards can the actor currently buy
 var can_buy_action: int = 0
+
+func start_rount():
+	if champion:
+		champion.add_mana()

@@ -20,6 +20,10 @@ func change_state(new_state: GameState) -> void:
 	current_state.enter()
 
 
+func can_use_special() -> bool:
+	return current_state.can_use_special()
+
+
 func allow_hand_click(card: BaseCard) -> bool:
 	return current_state.allow_hand_click(card)
 

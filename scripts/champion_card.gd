@@ -17,11 +17,21 @@ var health: int
 var power: int
 var max_mana: int
 var mana: int
+var special_mana: int
 
 func decrease_health(value):
 	health = max(0, health - value)
 	update_status()
 
+func special_attack():
+	pass
+
+func add_mana():
+	if mana < max_mana:
+		mana += 1
+
+func can_use_special() -> bool:
+	return mana >= special_mana and parent.can_use_special()
 
 func attack(champion: ChampionCard, damage := power):
 	champion.decrease_health(damage)

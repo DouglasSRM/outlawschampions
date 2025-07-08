@@ -102,6 +102,14 @@ func next_round():
 		end()
 
 
+func can_use_special() -> bool:
+	return state_machine.can_use_special()
+
+
+func _on_btn_restart_button_up() -> void:
+	end()
+
+
 func end():
 	get_tree().change_scene_to_file("res://scenes/start.tscn")
 
@@ -285,6 +293,8 @@ func manage_hover(card: BaseCard) -> bool:
 
 
 func pop_card(card: BaseCard):
+	if !is_inside_tree():
+		return
 	card.update_hover_position(0.3)
 	card.do_hover_animation()
 	await get_tree().create_timer(0.35).timeout
