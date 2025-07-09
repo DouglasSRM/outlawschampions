@@ -4,7 +4,7 @@ extends Effect
 var damage: int
 
 func _ready() -> void:
-	total_rounds = 5
+	total_rounds = 10
 
 func execute():
 	super()
