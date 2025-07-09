@@ -29,7 +29,8 @@ func handle_click() -> CardState:
 
 func try_exit_hover():
 	var old_pos = card.default_position
+	var old_state = card.state
 	while !card.can_hover():
 		await get_tree().create_timer(1).timeout
-	if card.default_position == old_pos:
+	if card.default_position == old_pos and card.state == old_state:
 		card.do_exit_hover_animation()

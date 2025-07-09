@@ -18,6 +18,7 @@ var power: int
 var max_mana: int
 var mana: int
 var special_mana: int
+var current_effects: Array[Effect]
 
 func decrease_health(value):
 	health = max(0, health - value)
@@ -35,7 +36,20 @@ func can_use_special() -> bool:
 
 func attack(champion: ChampionCard, damage := power):
 	champion.decrease_health(damage)
+	apply_passive_attacks(champion)
 
+func apply_passive_attacks(champion: ChampionCard) -> void:
+	pass
+
+func execute_effects() -> void:
+	for effect in current_effects:
+		effect.execute()
+		if effect.rounds_left <= 0:
+			current_effects.erase(effect)
+
+func apply_effect(effect: Effect) -> void:
+	effect.apply(self)
+	current_effects.append(effect)
 
 func update_status():
 	match health:
@@ -54,3 +68,5 @@ func select():
 func _ready() -> void:
 	if state_machine.current_state == null:
 		state_machine.init(self, select_state)
+	
+	current_effects = []

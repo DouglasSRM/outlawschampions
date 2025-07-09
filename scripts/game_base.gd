@@ -55,9 +55,18 @@ func start_enemy_loop():
 	await get_tree().create_timer(0.5).timeout
 	state_machine.handle_play_button()
 	await get_tree().create_timer(1).timeout
+	
+	#if current_actor.champion.mana == current_actor.champion.special_mana:
+		#await current_actor.champion.execute_click()
+	#else:
 	var card = await process_action_deck_click()
 	await get_tree().create_timer(1).timeout
 	card.execute_click()
+
+
+func check_effects() -> void:
+	for champion in Global.all_champions:
+		await champion.execute_effects()
 
 
 func get_random_sup_card_in_hand() -> SupportCard:
@@ -86,6 +95,8 @@ func get_actors_count() -> int:
 
 
 func next_round():
+	await check_effects()
+	
 	var old_actor = self.current_actor
 	
 	self.round += 1
@@ -104,6 +115,10 @@ func next_round():
 
 func can_use_special() -> bool:
 	return state_machine.can_use_special()
+
+
+func manage_champion_click() -> void:
+	state_machine.manage_champion_click()
 
 
 func _on_btn_restart_button_up() -> void:

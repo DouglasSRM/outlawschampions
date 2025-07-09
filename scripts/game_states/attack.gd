@@ -23,6 +23,12 @@ func can_use_special() -> bool:
 	return parent.is_player_turn()
 
 
+func manage_champion_click() -> GameState:
+	if parent.selected_card:
+		parent.selected_card.execute_click()
+	return locked
+
+
 func process_action_deck_click() -> GameState:
 	if parent.selected_card:
 		parent.selected_card.execute_click()

@@ -16,6 +16,7 @@ func mouse_leave() -> CardState:
 	return null
 
 func process_click() -> CardState:
+	card.parent.manage_champion_click()
 	card.special_attack()
 	return null
 

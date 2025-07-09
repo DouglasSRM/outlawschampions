@@ -12,24 +12,6 @@ func _ready() -> void:
 	state_machine.init(self,deck)
 
 
-func get_random_enemy() -> ChampionCard:
-	var possible_enemies = Global.all_champions.filter(func(c): return c != actor.champion and c.health_status != ChampionCard.hStatus.DEAD)
-	
-	return possible_enemies[randi_range(0, possible_enemies.size() - 1)]
-
-
-func playing_animation():
-	rotation = Vector3(deg_to_rad(-90), deg_to_rad(180), 0.0)
-	set_actor()
-	await self.move_to_position(Vector3(0,2,0), 0.5)
-	await get_tree().create_timer(0.5).timeout
-	
-	var pos = self.actor.champion.position
-	pos = Vector3(pos.x, 0.01, pos.z)
-	
-	await self.move_to_position(pos, 0.5)
-
-
 func play() -> bool:
 	await get_tree().create_timer(0.7).timeout
 	parent.handle_discard(self)

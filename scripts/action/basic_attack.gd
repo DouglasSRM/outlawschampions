@@ -16,9 +16,9 @@ func play() -> bool:
 	await playing_animation()
 	damage = actor.champion.power
 	
-	var enemy: ChampionCard = get_random_enemy()
+	var enemy: ChampionCard = Global.get_random_enemy(actor.champion)
 	
-	enemy.decrease_health(damage)
+	actor.champion.attack(enemy,damage)
 	parent.pop_card(enemy)
 	
 	unlock()

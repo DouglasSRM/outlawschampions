@@ -29,3 +29,6 @@ func process_action_deck_click() -> GameState:
 
 func process_support_deck_click() -> GameState:
 	return null
+
+func manage_champion_click() -> GameState:
+	return null

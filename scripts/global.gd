@@ -12,11 +12,9 @@ const opportunity_attack_scene = preload("res://scenes/action/opportunity_attack
 const parry_scene              = preload("res://scenes/support/parry.tscn")
 const protector_shield_scene   = preload("res://scenes/support/protector_shield.tscn")
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func get_alive_enemies(sender: ChampionCard) -> Array[ChampionCard]: 
+	return all_champions.filter(func(c): return c != sender and c.health_status != ChampionCard.hStatus.DEAD)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func get_random_enemy(sender: ChampionCard) -> ChampionCard:
+	var possible_enemies = get_alive_enemies(sender)
+	return possible_enemies[randi_range(0, possible_enemies.size() - 1)]

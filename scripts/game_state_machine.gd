@@ -32,6 +32,12 @@ func handle_hover(card: BaseCard) -> bool:
 	return current_state.handle_hover(card)
 
 
+func manage_champion_click():
+	var new_state = current_state.manage_champion_click()
+	if new_state:
+		change_state(new_state)
+
+
 func handle_play_button():
 	var new_state = await current_state.handle_play_button()
 	if new_state:

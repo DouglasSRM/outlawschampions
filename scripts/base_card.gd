@@ -137,6 +137,21 @@ func update_hover_position(hover_height: float = 0.7):
 	)
 
 
+func playing_animation():
+	rotation = Vector3(deg_to_rad(-90), deg_to_rad(180), 0.0)
+	set_actor()
+	await self.move_to_position(Vector3(0,2,0), 0.5)
+	await get_tree().create_timer(0.5).timeout
+	
+	if self is ActionCard:
+		var pos = self.actor.champion.position
+		pos = Vector3(pos.x, 0.01, pos.z)
+		
+		await self.move_to_position(pos, 0.5)
+	elif self is ChampionCard:
+		await self.move_to_position(default_position, 0.5)
+
+
 func get_actors_count() -> int:
 	return parent.get_actors_count()
 
