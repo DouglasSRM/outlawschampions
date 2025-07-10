@@ -35,5 +35,4 @@ func special_attack():
 	attack(enemy, power)
 	parent.pop_card(enemy)
 	
-	await get_tree().create_timer(0.7).timeout
-	parent.next_round()
+	super()

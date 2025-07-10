@@ -12,4 +12,4 @@ var can_buy_action: int = 0
 
 func start_rount():
 	if champion:
-		champion.add_mana()
+		champion.on_start_round()

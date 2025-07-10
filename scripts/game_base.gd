@@ -56,12 +56,12 @@ func start_enemy_loop():
 	state_machine.handle_play_button()
 	await get_tree().create_timer(1).timeout
 	
-	#if current_actor.champion.mana == current_actor.champion.special_mana:
-		#await current_actor.champion.execute_click()
-	#else:
-	var card = await process_action_deck_click()
-	await get_tree().create_timer(1).timeout
-	card.execute_click()
+	if current_actor.champion.mana == current_actor.champion.special_mana:
+		await current_actor.champion.execute_click()
+	else:
+		var card = await process_action_deck_click()
+		await get_tree().create_timer(0.5).timeout
+		card.execute_click()
 
 
 func check_effects() -> void:

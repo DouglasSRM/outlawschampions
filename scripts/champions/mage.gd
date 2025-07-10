@@ -16,5 +16,5 @@ func special_attack():
 	for enemy in Global.get_alive_enemies(self):
 		attack(enemy, 15)
 		parent.pop_card(enemy)
-	await get_tree().create_timer(0.7).timeout
-	parent.next_round()
+	
+	super()

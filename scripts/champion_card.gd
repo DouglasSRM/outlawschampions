@@ -25,7 +25,11 @@ func decrease_health(value):
 	update_status()
 
 func special_attack():
-	pass
+	await get_tree().create_timer(0.7).timeout
+	parent.next_round()
+
+func on_start_round():
+	add_mana()
 
 func add_mana():
 	if mana < max_mana:
