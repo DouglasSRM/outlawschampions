@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cnctfj1ywhmjc"
-path.s3tc="res://.godot/imported/background.jpeg-a2613abf2c44d1926dd12fe453c5833f.s3tc.ctex"
-path.etc2="res://.godot/imported/background.jpeg-a2613abf2c44d1926dd12fe453c5833f.etc2.ctex"
+uid="uid://dk5xpxmy3hvbr"
+path.s3tc="res://.godot/imported/powerful_attack.png-66f5fe4a997c8e0c19b6a7f9b79cab63.s3tc.ctex"
+path.etc2="res://.godot/imported/powerful_attack.png-66f5fe4a997c8e0c19b6a7f9b79cab63.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://images/background.jpeg"
-dest_files=["res://.godot/imported/background.jpeg-a2613abf2c44d1926dd12fe453c5833f.s3tc.ctex", "res://.godot/imported/background.jpeg-a2613abf2c44d1926dd12fe453c5833f.etc2.ctex"]
+source_file="res://images/powerful_attack.png"
+dest_files=["res://.godot/imported/powerful_attack.png-66f5fe4a997c8e0c19b6a7f9b79cab63.s3tc.ctex", "res://.godot/imported/powerful_attack.png-66f5fe4a997c8e0c19b6a7f9b79cab63.etc2.ctex"]
 
 [params]
 

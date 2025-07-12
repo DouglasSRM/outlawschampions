@@ -9,6 +9,9 @@ var all_champions: Array[ChampionCard]
 
 const basic_attack_scene       = preload("res://scenes/action/basic_attack.tscn")
 const opportunity_attack_scene = preload("res://scenes/action/opportunity_attack.tscn")
+const powerful_attack_scene    = preload("res://scenes/action/powerful_attack.tscn")
+const lilting_attack_scene     = preload("res://scenes/action/lilting_attack.tscn")
+
 const parry_scene              = preload("res://scenes/support/parry.tscn")
 const protector_shield_scene   = preload("res://scenes/support/protector_shield.tscn")
 

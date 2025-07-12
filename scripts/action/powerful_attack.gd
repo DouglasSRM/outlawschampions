@@ -1,4 +1,4 @@
-class_name OpportunityAttack
+class_name PowerfulAttack 
 extends ActionCard
 
 var damage: int
@@ -6,14 +6,14 @@ var damage: int
 func _ready() -> void:
 	super()
 	if actor:
-		damage = actor.champion.power * 2
+		damage = actor.champion.power +3
 	else:
 		damage = 0
 
 func play() -> bool:
 	lock()
 	await playing_animation()
-	damage = actor.champion.power * 2
+	damage = actor.champion.power + 3
 	var enemy: ChampionCard = Global.get_random_enemy(actor.champion)
 	
 	actor.champion.attack(enemy,damage)
@@ -24,4 +24,4 @@ func play() -> bool:
 
 func _process(delta: float) -> void:
 	if actor:
-		description = 'Deals DOUBLE the base damage of your champion ('+str(actor.champion.power * 2)+') to a random enemy'
+		description = 'Deals the base damage of your champion + 3 ('+str(actor.champion.power + 3)+') to a random enemy'

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cc4u01c30ok5y" path="res://scenes/champions/paladin.tscn" id="2_0auqf"]
 [ext_resource type="PackedScene" uid="uid://bf8s0geh1flxk" path="res://scenes/champions/druid.tscn" id="3_y16t7"]
 [ext_resource type="PackedScene" uid="uid://d3ih6it1bavcu" path="res://scenes/champions/rogue.tscn" id="4_4ge6i"]
-[ext_resource type="Texture2D" uid="uid://cnctfj1ywhmjc" path="res://images/background.jpeg" id="6_y16t7"]
+[ext_resource type="Texture2D" uid="uid://c76vfluog5iss" path="res://images/background.png" id="6_y16t7"]
 
 [node name="Start" type="Node3D"]
 script = ExtResource("1_0auqf")
@@ -35,7 +35,7 @@ transform = Transform3D(-1, 8.74228e-08, 0, 3.82137e-15, 4.37114e-08, 1, 8.74228
 [node name="Rogue" parent="3D/Cards" instance=ExtResource("4_4ge6i")]
 transform = Transform3D(-1, 8.74228e-08, 0, 3.82137e-15, 4.37114e-08, 1, 8.74228e-08, 1, -4.37114e-08, -1.05, 0, 0)
 
-[node name="Sprite3D" type="Sprite3D" parent="3D"]
+[node name="Background" type="Sprite3D" parent="3D"]
 transform = Transform3D(0.77, 0, 0, 0, -3.36578e-08, -0.77, 0, 0.77, -3.36578e-08, 0, -1.5, 0)
 texture = ExtResource("6_y16t7")
 

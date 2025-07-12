@@ -8,11 +8,7 @@ enum camera_pos {
 signal loaded
 
 @onready var cards: Node = $Game/Cards
-
-@onready var player_positions: Node = $Game/PositionComponents/PlayerPositions
-
 @onready var actors: Node = $Game/Actors
-
 @onready var camera: Camera3D = $Game/Camera
 
 @onready var lbl_card_description: Label = $GUI/Control/LblDescription
@@ -222,10 +218,11 @@ func create_support_cards():
 
 
 func create_action_card() -> ActionCard:
-	match randi_range(1,2):
+	match randi_range(1,4):
 		1:	return Global.basic_attack_scene.instantiate()
-		_:	return Global.opportunity_attack_scene.instantiate()
-
+		2:	return Global.opportunity_attack_scene.instantiate()
+		3:	return Global.powerful_attack_scene.instantiate()
+		_:	return Global.lilting_attack_scene.instantiate()
 
 func create_support_card() -> SupportCard:
 	match randi_range(1,2):
@@ -326,11 +323,6 @@ func handle_equip(card: BaseCard):
 func handle_discard(card: BaseCard):
 	discard_count += 1
 	card.discard()
-
-
-func set_player_positions():
-	for card in get_cards(BaseCard.IN_DECK):
-		card.set_position_component(player_positions)
 
 
 func get_cards(state: int, all: bool = true) -> Array[BaseCard]:
